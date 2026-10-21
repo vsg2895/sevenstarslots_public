@@ -124,17 +124,6 @@ export const viewport: Viewport = {
   themeColor: '#e9b649',
 }
 
-/**
- * The eleven legal pages, dealt into two footer columns.
- *
- * Computed from LEGAL_PAGES rather than written out, so adding a twelfth page
- * in one place puts it in the footer, the sitemap and generateStaticParams at
- * once. The first column takes the ceiling, so an odd count leaves the longer
- * list on the left where the heading above it is also longer.
- */
-const LEGAL_SPLIT = Math.ceil(LEGAL_PAGES.length / 2)
-const LEGAL_COLUMNS = [LEGAL_PAGES.slice(0, LEGAL_SPLIT), LEGAL_PAGES.slice(LEGAL_SPLIT)]
-
 const NAV_LINKS = [
   { href: '/casinos', label: COPY.nav.casinos },
   { href: '/special-offers', label: COPY.nav.specialOffers },
@@ -142,6 +131,17 @@ const NAV_LINKS = [
 ]
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  /*
+   * Widened to `string` deliberately.
+   *
+   * COPY is `as const`, so this would otherwise carry the LITERAL type of
+   * whatever address is written in copy.ts — and TypeScript then rejects
+   * `!== ''` as a comparison that can never be true. The check is not
+   * pointless: a freshly cloned site ships with this blank, and the footer has
+   * to omit the whole <address> element rather than print an empty one.
+   */
+  const postalAddress: string = COPY.footer.postalAddress
+
   let socialLinks: SocialLink[] = []
   try {
     socialLinks = (await getSocialLinks()).data
@@ -217,30 +217,28 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
         <div className="flex-1">{children}</div>
 
-        {/* Footer — the ink ground, the one place on the site that inverts.
+        {/* Footer — partnerplaypro's structure: two columns, then the full
+            legal row, then the legal bar.
 
-            Four tracks on desktop (brand · Explore · Legal · Responsible play),
-            collapsing to two on tablets and one on phones, as the mockup does.
-            The brand column takes 1.6fr so its blurb has a readable measure
-            while the three link columns stay narrow. */}
-        {/* The footer sits on its OWN ground, deeper than the page — the
-            mockup's `--footer`, with a hairline rule separating the two.
+            The GROUND and the token ramp stay this brand's own. Each of the
+            three HTML briefs names its own `--footer`, and the two-column
+            arrangement does not depend on the colour, so copying the layout
+            costs the brands nothing.
 
-            NOT `bg-ink`, which is what this markup said when it was cloned
-            from the light sibling. There `ink` was a dark navy and the class
-            produced a dark footer; here `ink` is warm cream, so the same class
-            rendered a cream slab carrying cream text. That one token is the
-            whole difference between cloning a dark site and a light one. */}
+            What this replaces: a four-track grid that split the eleven legal
+            pages across two headed columns. On a phone those columns stacked
+            into eleven rows under two headings, which made the footer taller
+            than most of the content above it and pushed the Explore links out
+            of reach. One wrapping row says the same thing in three. */}
         <footer className="mt-auto border-t border-line bg-[#0a1f1c] text-night-ink">
-          <div className="container mx-auto max-w-[1160px] px-5 pb-7 pt-14">
-            <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+          <div className="container mx-auto max-w-[1160px] px-5 py-12">
+            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
               <div>
-                {/* The Logo component itself, in its dark-ground variant, so the
-                    mark and wordmark here can never drift from the header's —
-                    the previous footer carried a hand-built copy, which is how
-                    it kept the old brand after the site was re-themed. */}
+                {/* The Logo component itself, in its dark-ground variant, so
+                    the mark and wordmark here can never drift from the
+                    header's. */}
                 <Logo onDark />
-                <p className="mt-4 max-w-[360px] text-[14.5px] leading-relaxed text-night-muted">
+                <p className="mt-3 max-w-[360px] text-sm leading-relaxed text-night-muted">
                   {COPY.footer.tagline}
                 </p>
                 {socialLinks.length > 0 && (
@@ -253,14 +251,16 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 )}
               </div>
 
-              <div>
-                <p className="font-display mb-3.5 text-base font-bold text-white">Explore</p>
-                <ul className="flex flex-col gap-1">
+              <div className="sm:text-right">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-night-accent">
+                  Explore
+                </p>
+                <ul className="flex flex-col gap-2">
                   {navLinks.map(({ href, label }) => (
                     <li key={href}>
                       <Link
                         href={href}
-                        className="inline-block -mx-1 -my-1 px-1 py-2 text-[14.5px] text-night-ink transition-colors hover:text-ink"
+                        className="inline-block -mx-1 -my-3 px-1 py-3 text-sm text-night-ink transition-colors hover:text-ink"
                       >
                         {label}
                       </Link>
@@ -268,73 +268,60 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                   ))}
                 </ul>
               </div>
-
-              {/* The eleven legal pages, split across two columns so neither
-                  runs to eleven rows against a four-row Explore list. `split`
-                  is computed rather than hardcoded: the array is shared with
-                  the sitemap and `generateStaticParams`, and a hand-written
-                  index would silently drop a page the day one is added. */}
-              {LEGAL_COLUMNS.map((column, i) => (
-                <nav key={i} aria-label={i === 0 ? 'Legal' : 'Policies'}>
-                  <p className="font-display mb-3.5 text-base font-bold text-white">
-                    {i === 0 ? 'Company' : 'Legal'}
-                  </p>
-                  <ul className="flex flex-col gap-1">
-                    {column.map(({ slug, label }) => (
-                      <li key={slug}>
-                        <Link
-                          href={`/${slug}`}
-                          className="inline-block -mx-1 -my-1 px-1 py-2 text-[14.5px] text-night-ink transition-colors hover:text-ink"
-                        >
-                          {label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              ))}
             </div>
 
-            {/* The legal bar. The circled 18+ reads as a mark rather than as
-                another line of grey type — on a page of bonus figures that is
-                the one piece of small print that has to be seen. */}
-            <div className="mt-10 flex flex-col gap-4 border-t border-night-line pt-5 text-[13.5px] text-night-muted sm:flex-row sm:items-center sm:justify-between">
-              <p className="flex items-center gap-3">
+            {/* All eleven legal pages in ONE wrapping row. The 44px tap target
+                comes from the padding; the negative margins cancel it so the
+                rows still sit tight together. */}
+            <nav aria-label="Legal" className="mt-10 border-t border-night-line pt-6">
+              <ul className="flex flex-wrap gap-x-5 gap-y-2">
+                {LEGAL_PAGES.map(({ slug, label }) => (
+                  <li key={slug}>
+                    <Link
+                      href={`/${slug}`}
+                      className="inline-block -mx-1 -my-3 px-1 py-3 text-xs text-night-faint transition-colors hover:text-ink"
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <CookieSettingsButton onDark />
+                </li>
+              </ul>
+            </nav>
+
+            <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-night-line pt-6 sm:flex-row">
+              <div className="text-center sm:text-left">
+                <p className="text-xs text-night-faint">
+                  © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
+                </p>
+                {/* Rendered only when an address exists: a freshly cloned site
+                    ships with this blank, and an empty <address> is worse than
+                    none. `not-italic` is load-bearing — Preflight does not
+                    reset the tag's italic default. */}
+                {postalAddress !== '' && (
+                  <address className="mt-1 text-xs not-italic text-night-faint">{postalAddress}</address>
+                )}
+              </div>
+              {/* The circled 18+ reads as a mark rather than as another line of
+                  grey type, with "Gamble responsibly" beside it — the same pair
+                  partnerplaypro's footer carries. The BeGambleAware link that
+                  used to follow was removed on the owner's instruction; the
+                  wording stayed. `aria-hidden` is correct on the span again now
+                  that the sentence is back to carry the meaning for a screen
+                  reader. */}
+              <p className="flex items-center gap-3 text-xs text-night-faint">
                 <span
                   aria-hidden
-                  className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full border-2 border-accent text-xs font-extrabold text-accent"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-accent text-[13px] font-extrabold text-accent"
                 >
                   18+
                 </span>
-                <span>
-                  Gamble responsibly. Help:{' '}
-                  <a
-                    href="https://www.begambleaware.org"
-                    target="_blank"
-                    rel="noopener nofollow"
-                    className="underline decoration-line-soft underline-offset-2 transition-colors hover:text-ink"
-                  >
-                    BeGambleAware.org
-                  </a>
-                </span>
+                Gamble responsibly
               </p>
-              <div className="sm:text-right">
-                <p>
-                  © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
-                </p>
-                {/* Postal address on its own line under the copyright: it stays
-                    legible on a phone, where the two would otherwise wrap into
-                    one another. `address` is the correct element semantically;
-                    `not-italic` is load-bearing, because Preflight does not
-                    reset it and the browser default for the tag is italic. */}
-                <address className="mt-1 not-italic">{COPY.footer.postalAddress}</address>
-              </div>
             </div>
-
-            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-night-faint">
-              <p className="max-w-[760px]">{COPY.footer.disclaimer}</p>
-              <CookieSettingsButton onDark />
-            </div>
+            <p className="mt-4 text-xs text-night-faint">{COPY.footer.disclaimer}</p>
           </div>
         </footer>
 
