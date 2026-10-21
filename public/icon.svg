@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42">
+  <!-- SevenStarSlots mark: near-black tile, seven-pointed gold star, a "7"
+       cut out of its centre.
+       The first <rect fill> is read by app/apple-icon.tsx as the background
+       plate, so it must stay the first element. -->
+  <rect width="42" height="42" rx="11" fill="#0a1f1c"/>
+  <rect x="4" y="4" width="34" height="34" rx="8" fill="none" stroke="#e9b649" stroke-width="1.2" opacity=".45"/>
+  <path d="M21.00 6.60L24.56 14.21L32.73 12.25L28.99 19.78L35.62 24.94L27.41 26.71L27.51 35.11L21.00 29.80L14.49 35.11L14.59 26.71L6.38 24.94L13.01 19.78L9.27 12.25L17.44 14.21Z" fill="#e9b649"/>
+  <path d="M16.6 16.4h9.2l-5 10.4" fill="none" stroke="#0a1f1c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
