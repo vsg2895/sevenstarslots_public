@@ -221,7 +221,7 @@ export default async function CasinoDetailPage({ params }: Props) {
                 width={192}
                 height={192}
                 sizes="96px"
-                className="h-[96px] w-[96px] shrink-0 rounded-xl border border-line bg-paper object-contain p-2"
+                className="h-[96px] w-[96px] shrink-0 rounded-xl border border-line bg-white object-contain p-2"
               />
             )}
             <div className="min-w-0">

@@ -88,10 +88,21 @@ export default function CasinoCard({
       )}
 
       {/* The logo plate. Fixed height, contained artwork, so a tall logo and a
-          wide one occupy the same box and the rows stay aligned. When there is
-          no artwork the operator's NAME fills the plate — the mockup's own
-          fallback, and far more use to a reader than an initial in a circle. */}
-      <div className="flex h-[90px] items-center justify-center overflow-hidden rounded-xl border border-line bg-cream p-2.5 [grid-area:logo] lg:h-[110px]">
+          wide one occupy the same box and the rows stay aligned.
+
+          WHITE, not `cream`. Operator logos arrive as artwork with their own
+          white ground baked in, so on a plate of any other colour the artwork's
+          own square shows through as a hard white rectangle floating inside the
+          tile — which is exactly how it looked on the dark brands, where
+          `cream` is a deep green or plum. A white plate lets the logo's ground
+          merge with it, and the result is the single rounded card
+          partnerplaypro has always shown.
+
+          It is a LITERAL white rather than a token on purpose: this surface
+          belongs to the logo, not to the theme, so it must stay white on a
+          brand whose palette inverts. When there is no artwork the operator's
+          NAME fills the plate instead. */}
+      <div className="flex h-[90px] items-center justify-center overflow-hidden rounded-xl border border-line bg-white p-2.5 [grid-area:logo] lg:h-[110px]">
         {image ? (
           <Image
             src={image}
@@ -103,7 +114,7 @@ export default function CasinoCard({
             style={{ objectFit: 'contain' }}
           />
         ) : (
-          <span className="font-display text-center text-[15px] font-extrabold leading-tight tracking-[-0.02em] text-ink [overflow-wrap:anywhere] lg:text-[19px]">
+          <span className="font-display text-center text-[15px] font-extrabold leading-tight tracking-[-0.02em] text-brand-ink [overflow-wrap:anywhere] lg:text-[19px]">
             {casino.name}
           </span>
         )}
