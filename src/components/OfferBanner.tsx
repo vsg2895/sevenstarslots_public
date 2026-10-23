@@ -17,12 +17,16 @@ import Image from 'next/image'
  * frame — the part that stays put — and leaves the artwork as the only thing
  * that differs from card to card.
  *
- * Some siblings ship that ground as a .webp in `public/`. Here it is a CSS
- * gradient — `.banner-wash` in globals.css — for two reasons: it costs no
- * request and no bytes, and it cannot fall out of step with the palette, which
- * a hand-cut image would. It is the same ground the detail-page banner uses,
- * so a bonus's artwork sits on the same colour on the card it is listed in and
- * on the page it opens.
+ * That ground is `/bonus-backdrop.webp`, the same file every site in the
+ * network uses, so a bonus card reads the same wherever it is seen. It was a
+ * CSS gradient here first — cheaper, and impossible to drift from the palette
+ * — but a flat gradient leaves the letterbox bands as plain colour, and a grid
+ * then reads as coloured boxes with pictures floating in them. The pattern
+ * gives the bands something to be.
+ *
+ * The DETAIL page keeps the `.banner-wash` gradient, deliberately: there is no
+ * set there for a banner to belong to, so the frame has no work to do and the
+ * pattern would only compete with the single piece of artwork on the page.
  *
  * Rendered even when a bonus has no artwork at all — and in that case
  * `fallbackText` is set on the ground instead, so the card carries the OFFER
@@ -61,11 +65,28 @@ export default function OfferBanner({
 }) {
   return (
     <>
-      {/* A CSS background rather than an <Image>: it is decoration, it is the
-          same on every card, and a gradient costs nothing to fetch or decode. */}
+      {/* ONE BACKDROP FOR EVERY BONUS, from `/bonus-backdrop.webp` — the same
+          file the eight older sites use, so a bonus card reads the same across
+          the network.
+
+          This replaced a per-site gradient. The gradient was consistent too,
+          but it left the letterbox bands either side of a contained banner as
+          flat colour, and a grid of cards then read as a column of coloured
+          boxes with pictures floating in them. The patterned ground gives the
+          bands something to be, which turns the backdrop into the FRAME — the
+          part that stays put — and leaves the artwork as the only thing that
+          differs from card to card.
+
+          A CSS background rather than a second <Image>: it is decoration, the
+          same few KB on every card, and the browser fetches and decodes it once
+          for the whole page instead of once per bonus.
+
+          CARDS ONLY. The single-bonus page shows its banner on a plain ground —
+          there is no set for it to belong to there, and the pattern would
+          compete with the one piece of artwork that page exists to show. */}
       <span
         aria-hidden
-        className="banner-wash absolute inset-0"
+        className="absolute inset-0 bg-[url('/bonus-backdrop.webp')] bg-cover bg-center"
       />
       {src ? (
         <Image

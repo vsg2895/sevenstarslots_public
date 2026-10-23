@@ -15,7 +15,26 @@ export default function CategoryNav({
   selected: string
 }) {
   return (
-    <nav aria-label="Casino categories" className="flex flex-wrap gap-2.5">
+    /*
+     * ONE FULL-WIDTH COLUMN ON A PHONE, a content-sized wrapping row from
+     * 640px up.
+     *
+     * Content sizing is right on a desktop, where the chips sit in one row and
+     * their differing widths read as differing words. On a phone the same rule
+     * produced a ragged stack — chips measured 156–187px wide, so some rows
+     * held two and some held one and no two edges lined up, which reads as
+     * unrelated buttons rather than one set of filters.
+     *
+     * Two equal columns do not fit: the widest chip needs ~187px and a
+     * half-width track at 390px is ~166px, so a nowrap label would be pushed
+     * out of its own chip. One column is the honest answer — every chip
+     * identical, nothing clipped, and it matches the bonus-type block above it,
+     * which is already a single column at this width.
+     *
+     * A plain block comment, not `{/* … *\/}`: a JSX expression container
+     * cannot sit where the returned element goes.
+     */
+      <nav aria-label="Casino categories" className="grid grid-cols-1 gap-2.5 sm:flex sm:flex-wrap">
       {categories.map((c) => {
         const active = c.slug === selected
         return (
@@ -45,7 +64,7 @@ export default function CategoryNav({
             // it 2px shorter than its neighbours — invisible while the tabs
             // share a row and are stretched to match, obvious the moment they
             // wrap to one per row.
-            className={`inline-flex min-h-[46px] items-center gap-2 rounded-full border px-[18px] text-[15px] font-semibold transition-colors ${
+            className={`flex w-full justify-center sm:inline-flex sm:w-auto sm:justify-start min-h-[46px] items-center gap-2 rounded-full border px-[18px] text-[15px] font-semibold transition-colors ${
               active
                 ? 'border-accent bg-accent text-accent-ink'
                 : 'border-line bg-paper text-ink hover:border-ink'

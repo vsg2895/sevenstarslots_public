@@ -8,6 +8,7 @@ import { resolveImageUrl } from '@/lib/images'
 import { COPY } from '@/constants/copy'
 import { SITE_URL } from '@/lib/config'
 import BonusTerms from '@/components/BonusTerms'
+import { CLAIMABLE_BONUS_CATEGORY } from '@/components/SpecialOfferCard'
 
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? ''
 
@@ -122,6 +123,8 @@ export default async function SpecialOfferDetailPage({ params }: Props) {
   }
 
   const banner = resolveImageUrl(offer.banner_image ?? offer.image_path)
+  // The same rule the cards use: Claim is a property of the bonus TYPE.
+  const claimable = offer.bonus_category_slug === CLAIMABLE_BONUS_CATEGORY
   const pageUrl = `${SITE_URL}/special-offers/${slug}`
   const breadcrumb = buildBreadcrumbSchema(
     [
@@ -179,7 +182,7 @@ export default async function SpecialOfferDetailPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(graph) }} />
 
       <main className="px-5 pb-16">
-        <div className="mx-auto max-w-[780px]">
+        <div className="mx-auto max-w-[90rem]">
           <nav className="pb-[22px] pt-7 text-[14.5px] text-muted" aria-label="Breadcrumb">
             <Link href="/" className="-mx-1 -my-3 inline-block px-1 py-3 transition-colors hover:text-brand">
               Home
@@ -227,71 +230,116 @@ export default async function SpecialOfferDetailPage({ params }: Props) {
             </div>
           )}
 
-          <header className="mb-[22px] mt-[30px]">
-            <h1 className="font-display text-[30px] font-extrabold leading-[1.08] text-ink sm:text-[42px]">
-              {offer.title}
-            </h1>
-            <p
-              className="mt-1.5 text-[18px] leading-none tracking-[2px] text-gold"
-              role="img"
-              aria-label={`${offer.rating} out of 5`}
-            >
-              {'★'.repeat(offer.rating)}
-              <span className="text-line-soft" aria-hidden>
-                {'★'.repeat(5 - offer.rating)}
-              </span>
-            </p>
+          {/* Title and rating on the left, the bonus figure and the CTA on
+              the right: the two things a visitor came for, both above the fold
+              on a desktop. Stacks in source order on a phone, where "what is
+              it" still reads before "claim it". */}
+          <header className="mt-[30px] flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h1 className="font-display text-[30px] font-extrabold leading-[1.08] text-ink sm:text-[42px]">
+                {offer.title}
+              </h1>
+              <p
+                className="mt-1.5 text-[18px] leading-none tracking-[2px] text-gold"
+                role="img"
+                aria-label={`${offer.rating} out of 5`}
+              >
+                {'★'.repeat(offer.rating)}
+                <span className="text-line-soft" aria-hidden>
+                  {'★'.repeat(5 - offer.rating)}
+                </span>
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:justify-end">
+              {offer.bonuses && (
+                <p className="rounded-xl bg-brand-tint px-6 py-5 text-[18px] font-bold text-brand-dark sm:text-[22px]">
+                  {offer.bonuses}
+                </p>
+              )}
+
+              {/* An EXPIRED offer keeps its page — the URL stays valid and the
+                  terms stay readable — but it must never be presented as
+                  claimable. The CTA is replaced with a plain statement rather
+                  than removed silently, so a visitor who followed an old link
+                  understands why there is nothing to press. */}
+              {offer.terms?.expired ? (
+                <p className="rounded-xl border border-line bg-surface px-5 py-4 text-[14px] font-semibold text-ink-soft">
+                  This offer ended
+                  {offer.terms.expires_at ? (
+                    <> on <time dateTime={offer.terms.expires_at}>{offer.terms.expires_at}</time></>
+                  ) : null}
+                  . It is no longer available to claim.{' '}
+                  <Link href="/special-offers" className="underline underline-offset-2 hover:text-brand">
+                    See current offers
+                  </Link>
+                </p>
+              ) : (
+                // Claim belongs to the Special Offers bonus type, matching the
+                // cards — see CLAIMABLE_BONUS_CATEGORY in SpecialOfferCard.
+                claimable && offer.affiliate_url && (
+                  <a
+                    href={offer.affiliate_url}
+                    target="_blank"
+                    rel="nofollow sponsored noopener"
+                    className="inline-flex min-h-[52px] shrink-0 items-center justify-center rounded-xl bg-brand px-[26px] py-4 text-[15.5px] font-bold text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  >
+                    {COPY.specialOffers.claim}
+                  </a>
+                )
+              )}
+            </div>
           </header>
 
-          {offer.bonuses && (
-            <p className="rounded-xl bg-brand-tint px-6 py-5 text-[18px] font-bold text-brand-dark sm:text-[22px]">
-              {offer.bonuses}
-            </p>
-          )}
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_26rem]">
+            {/* The rail: terms, the compliance line and the operator link.
+                FIRST IN SOURCE so the wagering requirement is read before the
+                sales copy on a phone; `lg:order-2` moves it beside the
+                description on a desktop. That order is the point of the
+                change — the terms used to sit below the prose, where a reader
+                deciding whether to deposit had already stopped reading. */}
+            <aside className="lg:order-2 lg:sticky lg:top-24 lg:self-start [&>section]:my-0 lg:[&_dl]:grid-cols-2">
+              {offer.terms && <BonusTerms terms={offer.terms} />}
 
-          {offer.affiliate_url && (
-            <a
-              href={offer.affiliate_url}
-              target="_blank"
-              rel="nofollow sponsored noopener"
-              className="mt-[22px] inline-flex min-h-[52px] items-center rounded-xl bg-brand px-[26px] py-4 text-[15.5px] font-bold text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-            >
-              {COPY.specialOffers.claim}
-            </a>
-          )}
+              <p className={`text-[13px] text-muted ${offer.terms ? 'mt-3' : ''}`}>
+                18+. T&amp;Cs apply — read the full conditions on the operator&apos;s own site before
+                depositing.{' '}
+                <Link href="/responsible-gambling" className="underline underline-offset-2 hover:text-brand">
+                  Play responsibly
+                </Link>
+                .
+              </p>
 
-          {/* The terms, as figures, immediately under the CTA — see
-              BonusTerms. Renders nothing when the operator has stated none,
-              rather than a panel of dashes. */}
-          {offer.terms && <BonusTerms terms={offer.terms} />}
+              {/* A card, not a bare line: beside a column of prose a lone
+                  sentence reads as a mistake. */}
+              {offer.casino && (
+                <div className="mt-4 rounded-xl border border-line bg-paper p-5 text-[15px] text-muted">
+                  <p>
+                    Offer by{' '}
+                    <Link
+                      href={`/casinos/${offer.casino.slug}`}
+                      className="font-bold text-brand underline underline-offset-2 hover:text-brand-dark"
+                    >
+                      {offer.casino.name}
+                    </Link>
+                  </p>
+                  <Link
+                    href={`/casinos/${offer.casino.slug}`}
+                    className="mt-3 inline-flex min-h-11 items-center font-bold text-brand underline underline-offset-4 hover:text-brand-dark"
+                  >
+                    Read the full review →
+                  </Link>
+                </div>
+              )}
+            </aside>
 
-          <p className="mt-3 text-[13px] text-muted">
-            18+. T&amp;Cs apply — read the full conditions on the operator&apos;s own site before
-            depositing.{' '}
-            <Link href="/responsible-gambling" className="underline underline-offset-2 hover:text-brand">
-              Play responsibly
-            </Link>
-            .
-          </p>
-
-          {offer.description && (
-            <div
-              className="prose mt-8 max-w-none"
-              dangerouslySetInnerHTML={{ __html: offer.description }}
-            />
-          )}
-
-          {offer.casino && (
-            <p className="mt-8 text-[15px] text-muted">
-              Offer by{' '}
-              <Link
-                href={`/casinos/${offer.casino.slug}`}
-                className="font-bold text-brand underline underline-offset-2 hover:text-brand-dark"
-              >
-                {offer.casino.name}
-              </Link>
-            </p>
-          )}
+            {offer.description && (
+              <div
+                className="prose min-w-0 max-w-none lg:order-1 lg:prose-lg"
+                dangerouslySetInnerHTML={{ __html: offer.description }}
+              />
+            )}
+          </div>
         </div>
       </main>
     </>
