@@ -127,9 +127,9 @@ export default async function BonusCategoryPage({ params, searchParams }: Props)
 
       {/* The same measure, grid and card as /special-offers, so arriving here
           from a chip is that listing narrowed rather than a different page. */}
-      <main className="px-5 pb-16 pt-10">
+      <main className="px-5 pb-12 pt-6 sm:pb-16 sm:pt-10">
         <div className="mx-auto max-w-[1160px]">
-          <nav className="mb-6 text-sm text-faint">
+          <nav className="mb-3 text-sm sm:mb-6 text-faint">
             <Link href="/" className="inline-block -mx-1 px-1 py-3 -my-3 hover:text-brand">Home</Link>
             {' / '}
             <Link href="/special-offers" className="inline-block -mx-1 px-1 py-3 -my-3 hover:text-brand">{COPY.nav.specialOffers}</Link>
@@ -137,9 +137,9 @@ export default async function BonusCategoryPage({ params, searchParams }: Props)
             <span className="text-ink">{category.name}</span>
           </nav>
 
-          <header className="mb-8">
-            <h1 className="font-display text-[34px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{category.name}</h1>
-            {category.description && <p className="mt-2 max-w-[680px] text-[17px] text-ink-soft">{category.description}</p>}
+          <header className="mb-4 sm:mb-8">
+            <h1 className="font-display text-[26px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{category.name}</h1>
+            {category.description && <p className="mt-1 max-w-[680px] text-[15px] text-ink-soft sm:mt-2 sm:text-[17px]">{category.description}</p>}
             {/* The count is what lets a reader trust the paginator: it says how
                 much is behind these cards. */}
             {meta.total > 0 && (

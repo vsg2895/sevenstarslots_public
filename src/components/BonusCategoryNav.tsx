@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { resolveImageUrl } from '@/lib/images'
 import { COPY } from '@/constants/copy'
+import MobileCollapse from '@/components/MobileCollapse'
 import type { BonusSection } from '@/lib/api'
 
 /**
@@ -98,6 +99,14 @@ export default function BonusCategoryNav({ sections }: { sections: BonusSection[
        * a bare `grid` — which means ONE column at every width, silently. An
        * inline style ships in the HTML and cannot go missing.
        */}
+      {/* The heading stays; on a phone the chips under it can be folded away. */}
+      <MobileCollapse
+        label={COPY.collapse.bonusTypes}
+        count={types.length}
+        className="min-h-11 rounded-xl border border-line bg-cream py-3.5 text-[15px] font-semibold text-ink transition-colors hover:border-brand hover:bg-paper"
+        countClassName="rounded-full bg-surface px-[9px] py-[3px] text-[12.5px] font-bold text-ink-soft"
+        actionClassName="text-brand"
+      >
       <ul
         style={{
           display: 'grid',
@@ -179,6 +188,7 @@ export default function BonusCategoryNav({ sections }: { sections: BonusSection[
           )
         })}
       </ul>
+      </MobileCollapse>
     </nav>
   )
 }

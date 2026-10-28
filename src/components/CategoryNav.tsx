@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import { resolveImageUrl } from '@/lib/images'
+import { COPY } from '@/constants/copy'
+import MobileCollapse from '@/components/MobileCollapse'
 import type { Category } from '@shared/types/category'
 
 /**
@@ -34,7 +37,15 @@ export default function CategoryNav({
      * A plain block comment, not `{/* … *\/}`: a JSX expression container
      * cannot sit where the returned element goes.
      */
-      <nav aria-label="Casino categories" className="grid grid-cols-1 gap-2.5 sm:flex sm:flex-wrap">
+      /* On a phone the one-column stack can be folded away — see MobileCollapse. */
+      <MobileCollapse
+        label={COPY.collapse.casinoCategories}
+        count={categories.length}
+        className="min-h-[46px] rounded-full border border-line bg-paper text-[15px] font-semibold text-ink transition-colors hover:border-ink"
+        countClassName="text-[12.5px] font-bold text-muted"
+        actionClassName="text-brand font-semibold"
+      >
+      <nav aria-label="Casino categories" className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:gap-2.5">
       {categories.map((c) => {
         const active = c.slug === selected
         return (
@@ -70,6 +81,12 @@ export default function CategoryNav({
                 : 'border-line bg-paper text-ink hover:border-ink'
             }`}
           >
+            {/* The category's own icon, the one the Casinos menu shows beside it.
+                A plain <img>: next/image refuses SVG, and an icon gains nothing
+                from resizing. alt="" because the label already names it. */}
+            {c.logo_path && (
+              <img src={resolveImageUrl(c.logo_path)!} alt="" width={18} height={18} className="h-[18px] w-[18px] shrink-0" />
+            )}
             {c.name}
             {typeof c.casinos_count === 'number' && (
               /* The count is what makes a tab worth pressing before it is
@@ -88,5 +105,6 @@ export default function CategoryNav({
         )
       })}
     </nav>
+    </MobileCollapse>
   )
 }

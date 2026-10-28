@@ -62,7 +62,7 @@ export default function NewsletterForm() {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
       <div>
-        <p className="font-display text-[20px] font-bold text-ink">{COPY.newsletter.title}</p>
+        <p className="font-display text-[17px] font-bold text-ink sm:text-[20px]">{COPY.newsletter.title}</p>
         <p className="mt-0.5 text-[14.5px] text-ink-soft">{COPY.newsletter.subtitle}</p>
       </div>
 
@@ -70,7 +70,7 @@ export default function NewsletterForm() {
         {/* Stacks on a phone: a 48px field and a 48px button sharing a 320px
             row leaves the field about 140px wide, which is narrower than most
             of the addresses typed into it. */}
-        <form onSubmit={onSubmit} className="relative flex flex-col gap-2.5 sm:flex-row">
+        <form onSubmit={onSubmit} className="relative flex gap-2.5">
 
           {/* HONEYPOT. Never shown, never focusable, never autofilled — a human
               cannot reach it, a naive bot fills every field it finds. The server
@@ -115,12 +115,12 @@ export default function NewsletterForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={COPY.newsletter.placeholder}
-            className="min-h-12 w-full rounded-xl border border-line bg-cream px-4 text-base text-ink placeholder:text-faint focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 sm:w-72"
+            className="min-h-11 w-full min-w-0 flex-1 sm:min-h-12 sm:flex-none rounded-xl border border-line bg-cream px-4 text-base text-ink placeholder:text-faint focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 sm:w-72"
           />
           <button
             type="submit"
             disabled={loading}
-            className="min-h-12 shrink-0 rounded-xl px-6 text-[15px] font-bold bg-brand text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0 disabled:opacity-60"
+            className="min-h-11 shrink-0 sm:min-h-12 rounded-xl px-6 text-[15px] font-bold bg-brand text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0 disabled:opacity-60"
           >
             {loading ? COPY.newsletter.checking : COPY.newsletter.button}
           </button>

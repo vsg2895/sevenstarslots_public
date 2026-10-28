@@ -75,9 +75,9 @@ export default async function CasinosPage({ searchParams }: Props) {
 
   if (!selected) {
     return (
-      <main className="px-5 pb-16 pt-10">
+      <main className="px-5 pb-12 pt-6 sm:pb-16 sm:pt-10">
         <div className="mx-auto max-w-[1160px]">
-          <h1 className="font-display text-[34px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.casinos.pageTitle}</h1>
+          <h1 className="font-display text-[26px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.casinos.pageTitle}</h1>
           <p className="mt-2 max-w-[680px] text-[17px] text-ink-soft">{COPY.casinos.noResults}</p>
         </div>
       </main>
@@ -123,18 +123,18 @@ export default async function CasinosPage({ searchParams }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(graph) }} />
-      <main className="px-5 pb-16 pt-10">
+      <main className="px-5 pb-12 pt-6 sm:pb-16 sm:pt-10">
         <div className="mx-auto max-w-[1160px]">
-          <header className="mb-8">
-            <h1 className="font-display text-[34px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.casinos.pageTitle}</h1>
-            <p className="mt-2 max-w-[680px] text-[17px] text-ink-soft">{COPY.casinos.pageDescription}</p>
+          <header className="mb-4 sm:mb-8">
+            <h1 className="font-display text-[26px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.casinos.pageTitle}</h1>
+            <p className="mt-1 max-w-[680px] text-[15px] text-ink-soft sm:mt-2 sm:text-[17px]">{COPY.casinos.pageDescription}</p>
           </header>
 
           {/* Category menu — top of the casinos list */}
-          <div className="mb-8"><CategoryNav categories={cats} selected={selected} /></div>
+          <div className="mb-5 sm:mb-8"><CategoryNav categories={cats} selected={selected} /></div>
 
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="font-display text-[24px] font-bold text-ink">{category.name}</h2>
+            <h2 className="font-display text-[20px] sm:text-[24px] font-bold text-ink">{category.name}</h2>
             <span className="text-[14.5px] text-muted">{meta.total} casinos</span>
           </div>
 

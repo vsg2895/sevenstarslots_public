@@ -129,12 +129,12 @@ export default async function HomePage({ searchParams }: Props) {
               (see `.hero-wash`), and the headline is the only thing in the
               band. Leaving the trace in would have been decoration borrowed
               from another brand's identity. */}
-          <div className="relative mx-auto max-w-[1160px] px-5 pb-10 pt-12 text-center sm:pb-14 sm:pt-[72px] lg:pb-[56px]">
+          <div className="relative mx-auto max-w-[1160px] px-5 pb-8 pt-8 text-center sm:pb-14 sm:pt-[72px] lg:pb-[56px]">
             <div className="mx-auto max-w-[960px]">
               {/* The eyebrow, with the heartbeat. One piece of motion on the
                   site, and `prefers-reduced-motion` stops it — see
                   globals.css. */}
-              <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-paper px-[18px] py-2 text-[12.5px] font-bold uppercase tracking-[0.18em] text-ink-soft">
+              <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-paper px-3.5 py-1.5 text-[11px] font-bold uppercase sm:px-[18px] sm:py-2 sm:text-[12.5px] tracking-[0.18em] text-ink-soft">
                 <span
                   className="pulse-dot h-2 w-2 shrink-0 rounded-full bg-brand"
                   aria-hidden
@@ -142,7 +142,7 @@ export default async function HomePage({ searchParams }: Props) {
                 {COPY.home.heroEyebrow}
               </p>
 
-              <h1 className="font-display mx-auto mb-[22px] mt-[26px] text-[34px] font-bold leading-[1.08] text-balance text-ink sm:text-[52px] lg:text-[72px]">
+              <h1 className="font-display mx-auto mb-3 mt-4 text-[30px] sm:mb-[22px] sm:mt-[26px] font-bold leading-[1.08] text-balance text-ink sm:text-[52px] lg:text-[72px]">
                 {COPY.home.heroHeadline}{' '}
                 {/* The highlight sits on a pale terracotta underline rather
                     than being a block of colour: the mockup's `em::after`. The
@@ -159,21 +159,21 @@ export default async function HomePage({ searchParams }: Props) {
                 </span>
               </h1>
 
-              <p className="mx-auto mb-[34px] max-w-[640px] text-pretty text-[17px] leading-relaxed text-ink-soft lg:text-[20px]">
+              <p className="mx-auto mb-5 max-w-[640px] text-pretty text-[15px] sm:mb-[34px] sm:text-[17px] leading-relaxed text-ink-soft lg:text-[20px]">
                 {COPY.home.heroSubtitle}
               </p>
 
-              <div className="flex flex-col justify-center gap-3.5 sm:flex-row">
+              <div className="flex flex-col justify-center gap-2.5 sm:gap-3.5 sm:flex-row">
                 <Link
                   href="/casinos"
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-brand px-[26px] py-4 text-[15.5px] font-bold text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                  className="inline-flex min-h-[3.25rem] w-full sm:w-auto whitespace-nowrap items-center sm:min-h-[52px] sm:flex-none justify-center rounded-xl bg-brand px-6 py-3.5 text-base sm:px-[26px] sm:py-4 sm:text-[15.5px] font-bold text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 >
                   {COPY.home.featuredCasinos}
                 </Link>
                 {anyOffersVisible && (
                   <Link
                     href="/special-offers"
-                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-line bg-paper px-[26px] py-4 text-[15.5px] font-bold text-ink transition-all hover:-translate-y-px hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                    className="inline-flex min-h-[3.25rem] w-full sm:w-auto whitespace-nowrap items-center sm:min-h-[52px] sm:flex-none justify-center rounded-xl border border-line bg-paper px-6 py-[13px] text-base sm:px-[26px] sm:py-4 sm:text-[15.5px] font-bold text-ink transition-all hover:-translate-y-px hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                   >
                     {COPY.home.specialOffers}
                   </Link>
@@ -183,57 +183,18 @@ export default async function HomePage({ searchParams }: Props) {
           </div>
         </section>
 
-        {/* Bonus types — the first thing under the hero.
-
-            Placed here rather than above it on purpose: the h1 has to stay the
-            top of the document for a reader and for a crawler alike, and a row
-            of filters above the page's own name reads as a second site header.
-            Directly beneath it, this is the first thing a visitor can act on.
-
-            Renders nothing when the site does not publish the Bonus area, so
-            the band collapses rather than leaving a gap. */}
-        {bonusSections.length > 0 && (
-          <section className="px-5">
-            <div className="mx-auto max-w-[1160px]">
-              {/* The panel, lit from two corners. THIS IS A DARK SITE: `paper` is a
-                  deep green, so the glows have to ADD light rather than tint it
-                  — warm gold and coral at low alpha read as luminous here,
-                  where the sibling site's dark-on-white wash would simply turn
-                  the panel to mud. Same structure, inverted treatment. No drop
-                  shadow for the same reason: a dark shadow on a dark ground is
-                  invisible, so the border does the separating */}
-              <div className="relative overflow-hidden rounded-3xl border border-line bg-paper p-6">
-                {/* Decoration only. No -z-10: the panel paints its own
-                    background, and a layer sent behind it would never be seen.
-                    `overflow-hidden` on the panel is what keeps these discs
-                    inside the rounded corners instead of bleeding past them. */}
-                <div aria-hidden className="pointer-events-none absolute inset-0">
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(233,182,73,0.10),transparent_62%)]" />
-                  <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(233,182,73,0.16),transparent_70%)] blur-2xl" />
-                  <div className="absolute -right-20 -bottom-28 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(224,122,95,0.18),transparent_70%)] blur-2xl" />
-                </div>
-
-                {/* `relative` so the content sits above the decoration. */}
-                <div className="relative">
-                  <BonusCategoryNav sections={bonusSections} />
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* Casinos by category */}
-        <section className="px-5 pt-[72px]" aria-labelledby="top-casinos-heading">
+        <section className="px-5 pt-8 sm:pt-[72px]" aria-labelledby="top-casinos-heading">
           <div className="mx-auto max-w-[1160px]">
-            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="mb-4 flex items-end justify-between gap-4 sm:mb-6">
               <div>
                 <h2
                   id="top-casinos-heading"
-                  className="font-display text-[28px] font-extrabold leading-[1.08] text-ink sm:text-[36px] lg:text-[44px]"
+                  className="font-display text-[24px] font-extrabold leading-[1.08] text-ink sm:text-[36px] lg:text-[44px]"
                 >
                   {COPY.home.topCasinosTitle}
                 </h2>
-                <p className="mt-2 text-[17px] text-ink-soft">{COPY.home.topCasinosSubtitle}</p>
+                <p className="mt-1 text-[15px] text-ink-soft sm:mt-2 sm:text-[17px]">{COPY.home.topCasinosSubtitle}</p>
               </div>
               {selected && (
                 <Link
@@ -246,7 +207,7 @@ export default async function HomePage({ searchParams }: Props) {
             </div>
 
             {categories.length > 0 && selected && (
-              <div className="mb-6">
+              <div className="mb-5 sm:mb-6">
                 <CategoryNav categories={categories} selected={selected} />
               </div>
             )}
@@ -276,6 +237,43 @@ export default async function HomePage({ searchParams }: Props) {
             )}
           </div>
         </section>
+
+        {/* Bonus types — directly under the casino list.
+
+            The casinos are what visitors came for, so they come first under
+            the hero; the bonus-type chips follow as the next way in.
+
+            Renders nothing when the site does not publish the Bonus area, so
+            the band collapses rather than leaving a gap. */}
+        {bonusSections.length > 0 && (
+          <section className="px-5 pt-10 sm:pt-14">
+            <div className="mx-auto max-w-[1160px]">
+              {/* The panel, lit from two corners. THIS IS A DARK SITE: `paper` is a
+                  deep green, so the glows have to ADD light rather than tint it
+                  — warm gold and coral at low alpha read as luminous here,
+                  where the sibling site's dark-on-white wash would simply turn
+                  the panel to mud. Same structure, inverted treatment. No drop
+                  shadow for the same reason: a dark shadow on a dark ground is
+                  invisible, so the border does the separating */}
+              <div className="relative overflow-hidden rounded-3xl border border-line bg-paper p-6">
+                {/* Decoration only. No -z-10: the panel paints its own
+                    background, and a layer sent behind it would never be seen.
+                    `overflow-hidden` on the panel is what keeps these discs
+                    inside the rounded corners instead of bleeding past them. */}
+                <div aria-hidden className="pointer-events-none absolute inset-0">
+                  <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(233,182,73,0.10),transparent_62%)]" />
+                  <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(233,182,73,0.16),transparent_70%)] blur-2xl" />
+                  <div className="absolute -right-20 -bottom-28 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(224,122,95,0.18),transparent_70%)] blur-2xl" />
+                </div>
+
+                {/* `relative` so the content sits above the decoration. */}
+                <div className="relative">
+                  <BonusCategoryNav sections={bonusSections} />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* How the pulse works — the method, in the order it happens.
 

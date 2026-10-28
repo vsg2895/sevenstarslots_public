@@ -51,6 +51,9 @@ export const COPY = {
     casinos: 'Casinos',
     specialOffers: 'Bonuses',
     categories: 'Categories',
+    // First row inside the header and footer dropdowns: the parent's own page.
+    allCasinos: 'All Casinos',
+    allOffers: 'All Offers',
   },
   home: {
     /**
@@ -209,5 +212,10 @@ export const COPY = {
     error: 'That did not send. Please check the form and try again.',
     ratingSummary: (avg: number, total: number) =>
       `${avg.toFixed(1)} out of 5 from ${total} ${total === 1 ? 'verdict' : 'verdicts'}`,
+  },
+  // Labels on the phone-only hide / show toggle above each chip list.
+  collapse: {
+    casinoCategories: 'Casino categories',
+    bonusTypes: 'Bonus types',
   },
 } as const

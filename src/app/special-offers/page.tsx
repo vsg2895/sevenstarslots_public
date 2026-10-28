@@ -31,11 +31,11 @@ export default async function SpecialOffersPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(webPage) }} />
-      <main className="px-5 pb-16 pt-10">
+      <main className="px-5 pb-12 pt-6 sm:pb-16 sm:pt-10">
       <div className="mx-auto max-w-[1160px]">
-        <header className="mb-8">
-          <h1 className="font-display text-[34px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.specialOffers.pageTitle}</h1>
-          <p className="mt-2 max-w-[680px] text-[17px] text-ink-soft">{COPY.specialOffers.pageDescription}</p>
+        <header className="mb-4 sm:mb-8">
+          <h1 className="font-display text-[26px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.specialOffers.pageTitle}</h1>
+          <p className="mt-1 max-w-[680px] text-[15px] text-ink-soft sm:mt-2 sm:text-[17px]">{COPY.specialOffers.pageDescription}</p>
         </header>
         {offers.length === 0 ? (
           <p className="rounded-[14px] border border-dashed border-line bg-paper p-10 text-center text-muted">{COPY.specialOffers.noResults}</p>

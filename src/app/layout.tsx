@@ -7,10 +7,14 @@ import CookieConsent from '@/components/CookieConsent'
 import ToastProvider from '@/components/ToastProvider'
 import CookieSettingsButton from '@/components/CookieSettingsButton'
 import Logo from '@/components/Logo'
-import { getSocialLinks, hasSpecialOffers } from '@/lib/api'
+import { getSocialLinks, hasSpecialOffers, getCategories, getBonusArea } from '@/lib/api'
 import { buildOrganizationSchema, buildWebSiteSchema, jsonLdScript } from '@/lib/seo'
 import { SITE_URL } from '@/lib/config'
 import { COPY } from '@/constants/copy'
+import NavDropdown from '@/components/NavDropdown'
+import FooterNavGroup from '@/components/FooterNavGroup'
+import MobileNav from '@/components/MobileNav'
+import { resolveImageUrl } from '@/lib/images'
 import { LEGAL_PAGES } from '@/constants/legalPages'
 import type { SocialLink } from '@shared/types/socialLink'
 import './globals.css'
@@ -130,6 +134,25 @@ const NAV_LINKS = [
   { href: '/categories', label: COPY.nav.categories },
 ]
 
+/** The header dropdown panel, in this site's own palette. */
+const NAV_PANEL = {
+  panelClassName: 'bg-paper ring-1 ring-line',
+  itemClassName: 'text-ink-soft hover:bg-brand/10 hover:text-brand',
+  allItemClassName: 'text-ink hover:bg-brand/10 hover:text-brand',
+  arrowClassName: 'text-brand',
+}
+
+/** The phone menu (below `md`), in this site's own palette. */
+const NAV_MOBILE = {
+  triggerClassName: 'text-ink hover:bg-brand/10 hover:text-brand',
+  panelClassName: 'bg-paper border-line',
+  rowClassName: 'text-ink hover:bg-brand/10 hover:text-brand',
+  rowExpandedClassName: 'bg-brand/10 text-brand',
+  allClassName: 'text-ink hover:bg-brand/10 hover:text-brand',
+  childClassName: 'text-ink-soft hover:bg-brand/10 hover:text-brand',
+  guideClassName: 'border-line',
+}
+
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   /*
    * Widened to `string` deliberately.
@@ -154,6 +177,21 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   // so both the header and the footer drop it.
   const showSpecialOffers = await hasSpecialOffers()
   const navLinks = NAV_LINKS.filter(({ href }) => href !== '/special-offers' || showSpecialOffers)
+
+  // Children for the Casinos and Bonuses entries, header and footer
+  // alike. Each carries the icon its chip shows, resolved here on the server so
+  // the client menus never need the storage URL. A failed fetch yields no
+  // items, and the entry then stays the plain link it always was.
+  const categoryMenuItems = await getCategories()
+    .then((res) => res.data.map((c) => ({ slug: c.slug, name: c.name, icon: resolveImageUrl(c.logo_path) })))
+    .catch(() => [])
+  // Bonus types with at least one visible offer on this site (the API drops
+  // empty ones). getBonusArea already falls back to [] on failure.
+  const bonusMenuItems = (await getBonusArea()).map((section) => ({
+    slug: section.slug,
+    name: section.name,
+    icon: resolveImageUrl(section.icon_path),
+  }))
 
   // Site-wide structured data, rendered once here so every page carries it.
   // Next.js manages the document <head> (manual <head> tags in a root layout are
@@ -186,9 +224,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <header className="sticky top-0 z-40 border-b border-line bg-cream/90 backdrop-blur-xl">
           <div className="container mx-auto flex h-[72px] max-w-[1160px] items-center justify-between gap-4 px-5">
             <Logo />
-            <nav aria-label="Main navigation" className="no-scrollbar -mr-5 min-w-0 overflow-x-auto pr-5">
+            <nav aria-label="Main navigation" className="hidden md:block no-scrollbar -mr-5 min-w-0 overflow-x-auto pr-5">
               <ul className="flex items-center gap-1 sm:gap-2" role="list">
-                {navLinks.map(({ href, label }) => (
+                {navLinks.map(({ href, label }) =>
+                  href === '/casinos' && categoryMenuItems.length > 0 ? (
+                    <NavDropdown key={href} label={label} href={href} allLabel={COPY.nav.allCasinos} itemBasePath="/categories" items={categoryMenuItems} triggerClassName="flex min-h-11 items-center whitespace-nowrap rounded-xl px-3 py-2 text-[15px] font-semibold text-ink transition-colors hover:bg-brand/10 hover:text-brand sm:px-4" {...NAV_PANEL} />
+                  ) : href === '/special-offers' && bonusMenuItems.length > 0 ? (
+                    <NavDropdown key={href} label={label} href={href} allLabel={COPY.nav.allOffers} itemBasePath="/bonuses" items={bonusMenuItems} triggerClassName="flex min-h-11 items-center whitespace-nowrap rounded-xl px-3 py-2 text-[15px] font-semibold text-ink transition-colors hover:bg-brand/10 hover:text-brand sm:px-4" {...NAV_PANEL} />
+                  ) : (
                   <li key={href}>
                     <Link
                       href={href}
@@ -197,9 +240,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                       {label}
                     </Link>
                   </li>
-                ))}
+                ),
+                )}
               </ul>
             </nav>
+            {/* Below md the strip above is hidden and this menu replaces it. */}
+            <MobileNav
+              links={navLinks}
+              groups={{
+                '/casinos': { allLabel: COPY.nav.allCasinos, items: categoryMenuItems, itemBasePath: '/categories' },
+                '/special-offers': { allLabel: COPY.nav.allOffers, items: bonusMenuItems, itemBasePath: '/bonuses' },
+              }}
+              theme={NAV_MOBILE}
+            />
           </div>
         </header>
 
@@ -209,7 +262,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             from the hero immediately below without needing a second rule. */}
         {SUBSCRIBE_ENABLED && (
           <section className="border-b border-line bg-paper" aria-label="Newsletter">
-            <div className="container mx-auto max-w-[1160px] px-5 py-[22px]">
+            <div className="container mx-auto max-w-[1160px] px-5 py-3.5 sm:py-[22px]">
               <NewsletterForm />
             </div>
           </section>
@@ -238,7 +291,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                     the mark and wordmark here can never drift from the
                     header's. */}
                 <Logo onDark />
-                <p className="mt-3 max-w-[360px] text-sm leading-relaxed text-night-muted">
+                <p className="mt-3 text-sm leading-relaxed text-night-muted">
                   {COPY.footer.tagline}
                 </p>
                 {socialLinks.length > 0 && (
@@ -251,12 +304,21 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 )}
               </div>
 
-              <div className="sm:text-right">
+              {/* On the right edge but LEFT-aligned, as on winpalack: right-aligning
+                  started every label at a different x, so the column read as
+                  ragged. `justify-self-end` sizes the column to its labels and
+                  pushes it to the right of its grid track. */}
+              <div className="sm:justify-self-end">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-night-accent">
                   Explore
                 </p>
                 <ul className="flex flex-col gap-2">
-                  {navLinks.map(({ href, label }) => (
+                  {navLinks.map(({ href, label }) =>
+                    href === '/casinos' && categoryMenuItems.length > 0 ? (
+                      <FooterNavGroup key={href} label={label} href={href} allLabel={COPY.nav.allCasinos} itemBasePath="/categories" items={categoryMenuItems} linkClassName="inline-block -mx-1 -my-3 px-1 py-3 text-sm text-night-ink transition-colors hover:text-ink" guideClassName="border-night-line" />
+                    ) : href === '/special-offers' && bonusMenuItems.length > 0 ? (
+                      <FooterNavGroup key={href} label={label} href={href} allLabel={COPY.nav.allOffers} itemBasePath="/bonuses" items={bonusMenuItems} linkClassName="inline-block -mx-1 -my-3 px-1 py-3 text-sm text-night-ink transition-colors hover:text-ink" guideClassName="border-night-line" />
+                    ) : (
                     <li key={href}>
                       <Link
                         href={href}
@@ -265,7 +327,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                         {label}
                       </Link>
                     </li>
-                  ))}
+                  ),
+                  )}
                 </ul>
               </div>
             </div>
@@ -273,8 +336,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             {/* All eleven legal pages in ONE wrapping row. The 44px tap target
                 comes from the padding; the negative margins cancel it so the
                 rows still sit tight together. */}
+            {/* Two even columns on a phone, so every link starts on one of two
+                shared edges; wrapped as a paragraph, no two rows lined up. */}
             <nav aria-label="Legal" className="mt-10 border-t border-night-line pt-6">
-              <ul className="flex flex-wrap gap-x-5 gap-y-2">
+              <ul className="grid grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:flex-wrap sm:gap-y-2">
                 {LEGAL_PAGES.map(({ slug, label }) => (
                   <li key={slug}>
                     <Link
@@ -308,12 +373,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                   grey type, with "Gamble responsibly" beside it — the same pair
                   partnerplaypro's footer carries. The BeGambleAware link that
                   used to follow was removed on the owner's instruction; the
-                  wording stayed. `aria-hidden` is correct on the span again now
-                  that the sentence is back to carry the meaning for a screen
-                  reader. */}
+                  wording stayed. Not `aria-hidden`: the sentence beside it
+                  never says the age, so a screen reader needs the "18+" too. */}
               <p className="flex items-center gap-3 text-xs text-night-faint">
                 <span
-                  aria-hidden
                   className="grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-accent text-[13px] font-extrabold text-accent"
                 >
                   18+
