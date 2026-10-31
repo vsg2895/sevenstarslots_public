@@ -206,7 +206,7 @@ export default async function SpecialOfferDetailPage({ params }: Props) {
                 src={banner}
                 alt={offer.title}
                 fill
-                sizes="(max-width: 820px) 100vw, 780px"
+                sizes="(max-width: 1024px) 100vw, 1440px"
                 priority
                 className="object-contain object-center"
               />
@@ -214,7 +214,7 @@ export default async function SpecialOfferDetailPage({ params }: Props) {
           ) : (
             /* No artwork: the offer itself becomes the banner, as the mockup
                does — typography on the ink ground rather than an empty box. */
-            <div className="banner-wash flex aspect-[16/8] items-center overflow-hidden rounded-[20px] border border-line p-5 sm:aspect-[16/5] sm:p-[56px]">
+            <div className="banner-wash flex aspect-[16/8] items-center overflow-hidden rounded-[20px] border border-line p-5 sm:aspect-[16/6] sm:p-[56px]">
               <p className="font-display max-w-full text-[26px] font-extrabold leading-none text-white sm:max-w-[70%] sm:text-[44px]">
                 {offer.bonus_category_name && (
                   <span className="mb-3 block text-[0.34em] font-semibold uppercase tracking-[0.16em] text-night-accent">

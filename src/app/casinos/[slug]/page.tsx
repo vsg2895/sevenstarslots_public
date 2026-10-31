@@ -171,7 +171,7 @@ export default async function CasinoDetailPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(graph) }} />
 
       <main className="px-5 pb-16">
-        <div className="mx-auto max-w-[780px]">
+        <div className="mx-auto max-w-[90rem]">
           <nav className="pb-[22px] pt-7 text-[14.5px] text-muted" aria-label="Breadcrumb">
             <Link href="/" className="-mx-1 -my-3 inline-block px-1 py-3 transition-colors hover:text-brand">
               Home
@@ -196,7 +196,7 @@ export default async function CasinoDetailPage({ params }: Props) {
                 alt={`${casino.name} banner`}
                 fill
                 className="object-contain"
-                sizes="(max-width: 820px) 100vw, 780px"
+                sizes="(max-width: 1024px) 100vw, 1440px"
                 priority
               />
             </div>
@@ -213,57 +213,63 @@ export default async function CasinoDetailPage({ params }: Props) {
             )
           )}
 
-          <header className="mb-[22px] mt-[30px] flex items-center gap-5">
-            {logo && (
-              <Image
-                src={logo}
-                alt={`${casino.name} logo`}
-                width={192}
-                height={192}
-                sizes="96px"
-                className="h-[96px] w-[96px] shrink-0 rounded-xl border border-line bg-white object-contain p-2"
-              />
-            )}
-            <div className="min-w-0">
-              <h1 className="font-display text-[32px] font-extrabold leading-[1.08] text-ink sm:text-[44px]">
-                {casino.name}
-              </h1>
-              <p
-                className="mt-1.5 text-[18px] leading-none tracking-[2px] text-gold"
-                role="img"
-                aria-label={`${casino.rating} out of 5`}
+          {/* Name and rating on the left, the bonus bar and the CTA on the right:
+              the two things a visitor came for, without scrolling. */}
+          <header className="mt-[30px] flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-5">
+              {logo && (
+                <Image
+                  src={logo}
+                  alt={`${casino.name} logo`}
+                  width={160}
+                  height={160}
+                  sizes="(min-width: 1024px) 80px, 64px"
+                  className="h-16 w-16 shrink-0 rounded-xl border border-line bg-white object-contain p-1.5 lg:h-20 lg:w-20"
+                />
+              )}
+              <div className="min-w-0">
+                <h1 className="font-display text-[32px] font-extrabold leading-[1.08] text-ink sm:text-[44px]">
+                  {casino.name}
+                </h1>
+                <p
+                  className="mt-1.5 text-[18px] leading-none tracking-[2px] text-gold"
+                  role="img"
+                  aria-label={`${casino.rating} out of 5`}
+                >
+                  {'★'.repeat(casino.rating)}
+                  <span className="text-line-soft" aria-hidden>
+                    {'★'.repeat(5 - casino.rating)}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:justify-end">
+              {/* The bonus bar — the mockup's `.bonusbar`. Pale terracotta ground,
+                  dark terracotta type: the one figure on the page a reader came
+                  for, stated once, large. */}
+              {casino.bonuses && (
+                <p className="rounded-xl bg-brand-tint px-6 py-5 text-[18px] font-bold text-brand-dark sm:text-[22px]">
+                  {casino.bonuses}
+                </p>
+              )}
+
+              <a
+                href={casino.attachment.affiliate_url}
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                className="inline-flex min-h-[52px] shrink-0 items-center justify-center rounded-xl bg-brand px-[26px] py-4 text-[15.5px] font-bold text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               >
-                {'★'.repeat(casino.rating)}
-                <span className="text-line-soft" aria-hidden>
-                  {'★'.repeat(5 - casino.rating)}
-                </span>
-              </p>
+                {COPY.casinos.visitCasino}
+              </a>
             </div>
           </header>
-
-          {/* The bonus bar — the mockup's `.bonusbar`. Pale terracotta ground,
-              dark terracotta type: the one figure on the page a reader came
-              for, stated once, large. */}
-          {casino.bonuses && (
-            <p className="rounded-xl bg-brand-tint px-6 py-5 text-[18px] font-bold text-brand-dark sm:text-[22px]">
-              {casino.bonuses}
-            </p>
-          )}
-
-          <a
-            href={casino.attachment.affiliate_url}
-            target="_blank"
-            rel="nofollow sponsored noopener"
-            className="mt-[22px] inline-flex min-h-[52px] items-center rounded-xl bg-brand px-[26px] py-4 text-[15.5px] font-bold text-brand-ink shadow-[0_8px_22px_-10px_rgba(233,182,73,0.8)] transition-all hover:-translate-y-px hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-          >
-            {COPY.casinos.visitCasino}
-          </a>
 
           {/* T&Cs, immediately under the CTA rather than in the footer.
               A visible terms link beside every bonus figure is a compliance
               requirement, and the operator's own terms are the only place the
               full conditions exist. */}
-          <p className="mt-3 text-[13px] text-muted">
+          <p className="mt-3 text-[13px] text-muted lg:text-right">
             18+. T&amp;Cs apply — read the full conditions on the operator&apos;s own site before
             depositing.{' '}
             <Link href="/responsible-gambling" className="underline underline-offset-2 hover:text-brand">
@@ -272,112 +278,124 @@ export default async function CasinoDetailPage({ params }: Props) {
             .
           </p>
 
-          {/* Summary panel — the same at-a-glance facts the sibling sites show,
-              so a reader gets rating, offer count, categories and revision date
-              without scrolling the review. Every row is conditional: a casino
-              with no offers or no categories simply renders fewer rows. */}
-          <section
-            className="my-[30px] rounded-[14px] border border-line bg-paper p-7"
-            aria-labelledby="at-a-glance"
-          >
-            <h2 id="at-a-glance" className="font-display mb-5 text-[22px] font-bold text-ink">
-              {casino.name} {COPY.casinos.glanceHeadingTail}
-            </h2>
-            <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              <div>
-                <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
-                  {COPY.casinos.rating}
-                </dt>
-                <dd className="text-[16.5px] text-ink">{casino.rating} out of 5</dd>
-              </div>
-              {liveOffers > 0 && (
-                <div>
-                  <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
-                    Bonuses listed
-                  </dt>
-                  <dd className="text-[16.5px] text-ink">
-                    {liveOffers} {liveOffers === 1 ? 'bonus' : 'bonuses'} on this page
-                  </dd>
-                </div>
-              )}
-              {categoryNames.length > 0 && (
-                <div>
-                  <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
-                    Listed under
-                  </dt>
-                  <dd className="text-[16.5px] text-ink">{categoryNames.join(', ')}</dd>
-                </div>
-              )}
-              {/* `reviewed_at` is the date a PERSON last read this operator —
-                  not `updated_at`, which any field edit bumps. Null means
-                  nobody has recorded a reading, and this site must not imply
-                  one happened, so the row is simply absent. */}
-              {casino.reviewed_at && (
-                <div>
-                  <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
-                    Last read
-                  </dt>
-                  <dd className="text-[16.5px] text-ink">
-                    <time dateTime={casino.reviewed_at}>
-                      {new Date(casino.reviewed_at).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
-                    </time>
-                  </dd>
-                </div>
-              )}
-              {/* Where the operator accepts players from. Real, attached data —
-                  the full list here, where there is room for it, rather than
-                  the card's first three. */}
-              {casino.countries && casino.countries.length > 0 && (
-                <div className="sm:col-span-2 lg:col-span-3">
-                  <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
-                    Accepts players from
-                  </dt>
-                  <dd className="flex flex-wrap gap-2">
-                    {casino.countries.map((country) => (
-                      <span
-                        key={country.id}
-                        className="inline-flex items-center rounded-full bg-win-bg px-[11px] py-1 text-[13px] font-semibold text-win"
-                      >
-                        {country.name}
-                      </span>
-                    ))}
-                  </dd>
-                </div>
-              )}
-            </dl>
-          </section>
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_26rem]">
+            {/* The rail. First in source so the at-a-glance facts still read
+                before the long description on phones, where the columns stack;
+                on desktop `lg:order-2` moves it right and `sticky` keeps it in
+                view while the review scrolls. */}
+            <aside className="lg:order-2 lg:sticky lg:top-24 lg:self-start">
+              {/* Summary panel — the same at-a-glance facts the sibling sites show,
+                  so a reader gets rating, offer count, categories and revision date
+                  without scrolling the review. Every row is conditional: a casino
+                  with no offers or no categories simply renders fewer rows. */}
+              <section
+                className="rounded-[14px] border border-line bg-paper p-7"
+                aria-labelledby="at-a-glance"
+              >
+                <h2 id="at-a-glance" className="font-display mb-5 text-[22px] font-bold text-ink">
+                  {casino.name} {COPY.casinos.glanceHeadingTail}
+                </h2>
+                <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
+                  <div>
+                    <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
+                      {COPY.casinos.rating}
+                    </dt>
+                    <dd className="text-[16.5px] text-ink">{casino.rating} out of 5</dd>
+                  </div>
+                  {liveOffers > 0 && (
+                    <div>
+                      <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Bonuses listed
+                      </dt>
+                      <dd className="text-[16.5px] text-ink">
+                        {liveOffers} {liveOffers === 1 ? 'bonus' : 'bonuses'} on this page
+                      </dd>
+                    </div>
+                  )}
+                  {categoryNames.length > 0 && (
+                    <div>
+                      <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Listed under
+                      </dt>
+                      <dd className="text-[16.5px] text-ink">{categoryNames.join(', ')}</dd>
+                    </div>
+                  )}
+                  {/* `reviewed_at` is the date a PERSON last read this operator —
+                      not `updated_at`, which any field edit bumps. Null means
+                      nobody has recorded a reading, and this site must not imply
+                      one happened, so the row is simply absent. */}
+                  {casino.reviewed_at && (
+                    <div>
+                      <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Last read
+                      </dt>
+                      <dd className="text-[16.5px] text-ink">
+                        <time dateTime={casino.reviewed_at}>
+                          {new Date(casino.reviewed_at).toLocaleDateString('en-GB', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                          })}
+                        </time>
+                      </dd>
+                    </div>
+                  )}
+                  {/* Where the operator accepts players from. Real, attached data —
+                      the full list here, where there is room for it, rather than
+                      the card's first three. */}
+                  {casino.countries && casino.countries.length > 0 && (
+                    <div className="sm:col-span-2 lg:col-span-1">
+                      <dt className="mb-1.5 text-[12.5px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Accepts players from
+                      </dt>
+                      <dd className="flex flex-wrap gap-2">
+                        {casino.countries.map((country) => (
+                          <span
+                            key={country.id}
+                            className="inline-flex items-center rounded-full bg-win-bg px-[11px] py-1 text-[13px] font-semibold text-win"
+                          >
+                            {country.name}
+                          </span>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+              </section>
+            </aside>
 
-          {casino.description && (
-            <div
-              className="prose mt-8 max-w-none"
-              dangerouslySetInnerHTML={{ __html: casino.description }}
-            />
-          )}
+            {/* Every block below carries its own top margin; the first one
+                loses it so the column starts level with the rail. */}
+            <div className="min-w-0 lg:order-1 [&>*:first-child]:mt-0">
+              {casino.description && (
+                <div
+                  className="prose mt-8 max-w-none"
+                  dangerouslySetInnerHTML={{ __html: casino.description }}
+                />
+              )}
 
-          {casino.categories && casino.categories.length > 0 && (
-            <div className="mt-8 flex flex-wrap gap-2.5">
-              {casino.categories.map((c) => (
-                <Link
-                  key={c.id}
-                  href={`/categories/${c.slug}`}
-                  className="inline-flex min-h-11 items-center rounded-full border border-line bg-paper px-[18px] text-[15px] font-semibold text-ink transition-colors hover:border-brand hover:text-brand"
-                >
-                  {c.name}
-                </Link>
-              ))}
+              {casino.categories && casino.categories.length > 0 && (
+                <div className="mt-8 flex flex-wrap gap-2.5">
+                  {casino.categories.map((c) => (
+                    <Link
+                      key={c.id}
+                      href={`/categories/${c.slug}`}
+                      className="inline-flex min-h-11 items-center rounded-full border border-line bg-paper px-[18px] text-[15px] font-semibold text-ink transition-colors hover:border-brand hover:text-brand"
+                    >
+                      {c.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              <CasinoSpecialOffers offers={casino.special_offers ?? []} />
+
+              {/* Renders nothing at all until this site's "Visitor reviews"
+                  switch is on in the admin — the component gates itself on the
+                  endpoint's 404, so no per-site conditional is needed here. */}
+              <CasinoReviews casinoSlug={casino.slug} casinoName={casino.name} />
             </div>
-          )}
-
-          <CasinoSpecialOffers offers={casino.special_offers ?? []} />
-
-          {/* Renders nothing at all until this site's "Visitor reviews"
-              switch is on in the admin — the component gates itself on the
-              endpoint's 404, so no per-site conditional is needed here. */}
-          <CasinoReviews casinoSlug={casino.slug} casinoName={casino.name} />
+          </div>
         </div>
       </main>
     </>
