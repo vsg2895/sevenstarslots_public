@@ -117,8 +117,12 @@ export default function BonusCategoryNav({ sections }: { sections: BonusSection[
            * two lines while its neighbours stay on one. It still leaves a
            * single full-width column at 320px (the narrowest phone in use), so
            * nothing is forced into a cramped second column.
+           *
+           * `min(15rem, 100%)`, not a bare 15rem: inside the home page's padded
+           * panel a 320px phone leaves the list ~230px, and a 240px track then
+           * pushed every chip 10px past the panel edge, where it was clipped.
            */
-          gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(15rem, 100%), 1fr))',
           // 0.625rem is Tailwind's gap-2.5, inlined with the rest so the layout
           // has ONE source rather than half a rule here and half in a class.
           gap: '0.625rem',
