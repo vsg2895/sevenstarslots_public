@@ -9,12 +9,20 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Email verified',
   robots: { index: false, follow: false },
+  // Cleared, not inherited: the layout's defaults are the HOMEPAGE's canonical,
+  // og:url and share card. A per-subscriber token URL has none of those.
+  alternates: { canonical: null },
+  openGraph: null,
+  twitter: null,
 }
 
-/**
- * Accent panel for this page — THIS site's brand colour, not a shared default.
+/*
+ * Colours come from THIS site's tokens, not a hex constant. This page carried
+ * `#c91f58` — partnerplaypro's crimson, copied in with the shared page and
+ * neither this site's brand nor anything in its palette. The panel is
+ * the `brand` token with `brand-ink` on it, as on this site's own primary
+ * buttons (white on this gold would not be readable).
  */
-const ACCENT = '#c91f58'
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? 'our newsletter'
 
 // Focus ring shared by both links, so the page stays keyboard-navigable, and
@@ -36,9 +44,9 @@ export default async function VerifyPage({ params }: Props) {
   return (
     <main className="flex min-h-[70vh] items-center justify-center px-4 py-16">
       <div className="w-full max-w-md overflow-hidden rounded-2xl border border-line bg-paper shadow-sm">
-        <div className="px-8 py-7 text-white" style={{ backgroundColor: ACCENT }}>
+        <div className="bg-brand px-8 py-7 text-brand-ink">
           {ok && bonusEmailExpected && (
-            <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+            <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-brand-ink/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-ink">
               <span aria-hidden="true">✓</span> Email verified
             </p>
           )}
@@ -49,7 +57,7 @@ export default async function VerifyPage({ params }: Props) {
                 ? 'Your bonus is on its way'
                 : '🎉 You’re all set!'}
           </h1>
-          <p className="mt-1 text-sm text-white/80">{SITE_NAME}</p>
+          <p className="mt-1 text-sm text-brand-ink/75">{SITE_NAME}</p>
         </div>
 
         <div className="px-8 py-7">
@@ -65,9 +73,11 @@ export default async function VerifyPage({ params }: Props) {
                 active. We&apos;re sending your exclusive subscriber bonus to your inbox now.
               </p>
 
-              <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-4">
-                <p className="text-sm font-bold text-amber-900">Don&apos;t see it?</p>
-                <ul className="mt-2 list-disc space-y-2 pl-5 text-sm leading-relaxed text-amber-900">
+              {/* The site's own tinted panel. The light-theme yellow box that was
+                  here sat as a bright slab in the middle of a dark page. */}
+              <div className="mt-5 rounded-xl border border-brand/35 bg-brand-tint px-4 py-4">
+                <p className="text-sm font-bold text-brand">Don&apos;t see it?</p>
+                <ul className="mt-2 list-disc space-y-2 pl-5 text-sm leading-relaxed text-ink-soft marker:text-brand">
                   <li>
                     Check your <span className="font-bold">Promotions</span> tab and your {' '}
                     <span className="font-bold">Spam</span> folder — that&apos;s where it usually
@@ -96,8 +106,7 @@ export default async function VerifyPage({ params }: Props) {
 
           <Link
             href="/"
-            className={`mt-6 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 motion-reduce:transition-none ${FOCUS}`}
-            style={{ backgroundColor: ACCENT }}
+            className={`mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-5 py-2 text-sm font-bold text-brand-ink transition-colors hover:bg-brand-dark motion-reduce:transition-none ${FOCUS}`}
           >
             Explore {SITE_NAME}
           </Link>

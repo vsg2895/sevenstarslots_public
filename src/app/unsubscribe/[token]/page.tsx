@@ -10,15 +10,20 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Unsubscribe',
   robots: { index: false, follow: false },
+  // Cleared, not inherited: the layout's defaults are the HOMEPAGE's canonical,
+  // og:url and share card. A per-subscriber token URL has none of those.
+  alternates: { canonical: null },
+  openGraph: null,
+  twitter: null,
 }
 
-/**
- * Accent panel for this page — THIS site's brand colour, not a shared default.
- * the site's own --color-brand-dark token. white 6.92:1, white/80 4.96:1.
- * Both figures matter: the heading is large text, but the `text-white/80`
- * subtitle is small and needs the full 4.5:1.
+/*
+ * Colours come from THIS site's tokens, not a hex constant. This page carried
+ * `#c91f58` — partnerplaypro's crimson, copied in with the shared page and
+ * neither this site's brand nor anything in its palette. The panel is
+ * the `brand` token with `brand-ink` on it, as on this site's own primary
+ * buttons (white on this gold would not be readable).
  */
-const ACCENT = '#c91f58'
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? 'our newsletter'
 
 type Props = {
@@ -51,7 +56,7 @@ export default async function UnsubscribePage({ params, searchParams }: Props) {
   return (
     <main className="flex min-h-[70vh] items-center justify-center px-4 py-16">
       <div className="w-full max-w-md overflow-hidden rounded-2xl border border-line bg-paper shadow-sm">
-        <div className="px-8 py-7 text-white" style={{ backgroundColor: ACCENT }}>
+        <div className="bg-brand px-8 py-7 text-brand-ink">
           <h1 className="text-xl font-bold">
             {!submitted
               ? 'Confirm unsubscribe'
@@ -59,7 +64,7 @@ export default async function UnsubscribePage({ params, searchParams }: Props) {
                 ? 'You’ve been unsubscribed'
                 : 'Something went wrong'}
           </h1>
-          <p className="mt-1 text-sm text-white/80">{SITE_NAME}</p>
+          <p className="mt-1 text-sm text-brand-ink/75">{SITE_NAME}</p>
         </div>
 
         <div className="px-8 py-7">
@@ -74,8 +79,7 @@ export default async function UnsubscribePage({ params, searchParams }: Props) {
                 <input type="hidden" name="token" value={token} />
                 <button
                   type="submit"
-                  className="mt-6 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: ACCENT }}
+                  className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-5 py-2 text-sm font-bold text-brand-ink transition-colors hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
                   Unsubscribe me
                 </button>
@@ -96,8 +100,7 @@ export default async function UnsubscribePage({ params, searchParams }: Props) {
 
           <Link
             href="/"
-            className="mt-6 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: ACCENT }}
+            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full border border-line-soft px-5 py-2 text-sm font-bold text-ink transition-colors hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             Back to homepage
           </Link>
