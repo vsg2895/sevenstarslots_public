@@ -14,6 +14,7 @@ import type { Category } from '@shared/types/category'
 import type { CasinoWithAttachment } from '@shared/types/casino'
 import type { SpecialOffer } from '@shared/types/specialOffer'
 import { SITE_URL } from '@/lib/config'
+import { casinosHeading } from '@/lib/categories'
 
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? ''
 const YEAR = new Date().getFullYear()
@@ -240,7 +241,7 @@ export default async function HomePage({ searchParams }: Props) {
               <div className="mt-9 text-center">
                 <Link
                   href={`/categories/${selected}`}
-                  aria-label={`See all ${activeCategory.name} casinos`}
+                  aria-label={`See all ${casinosHeading(activeCategory.name)}`}
                   className="inline-flex min-h-[46px] items-center rounded-full border border-line bg-paper px-7 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink"
                 >
                   See More <span aria-hidden className="ml-1.5">→</span>
