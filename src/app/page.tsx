@@ -16,6 +16,9 @@ import type { SpecialOffer } from '@shared/types/specialOffer'
 import { SITE_URL } from '@/lib/config'
 import { casinosHeading } from '@/lib/categories'
 
+/** Offers shown per bonus type in the home page's Bonuses section — one row. */
+const HOME_BONUSES_PER_CATEGORY = 3
+
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? ''
 const YEAR = new Date().getFullYear()
 
@@ -63,11 +66,13 @@ export default async function HomePage({ searchParams }: Props) {
     // Runs alongside the others, so it costs no extra round-trip of latency, and
     // the public endpoint already excludes offers whose visibility is off.
     getSpecialOffers(undefined, 1),
-    // The bonus TYPES, for the chip row under the hero. `limit: 1` because the
-    // chips need the names, the marks and the counts — not the offers. Runs
-    // alongside the others, so it costs no extra round-trip, and allSettled
-    // means a site without the Bonus area simply renders no chips.
-    getBonusArea(1),
+    // The bonus TYPES: the chip row under the hero AND the per-type Bonuses
+    // section further down, so each type brings its first
+    // HOME_BONUSES_PER_CATEGORY offers (one full row of the three-up grid).
+    // The chips only read names, marks and counts, which the server counts
+    // over the unlimited set. allSettled means a site without the Bonus area
+    // renders neither, and falls back to the plain Special offers grid.
+    getBonusArea(HOME_BONUSES_PER_CATEGORY),
   ])
 
   // Empty when the site does not publish the Bonus area, or when the
@@ -209,14 +214,6 @@ export default async function HomePage({ searchParams }: Props) {
                 </h2>
                 <p className="mt-1 text-[15px] text-ink-soft sm:mt-2 sm:text-[17px]">{COPY.home.topCasinosSubtitle}</p>
               </div>
-              {selected && (
-                <Link
-                  href={`/categories/${selected}`}
-                  className="-mx-1 -my-3 inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 py-3 text-[15px] font-bold text-brand transition-colors hover:text-brand-dark"
-                >
-                  {COPY.home.viewAll} <span aria-hidden>→</span>
-                </Link>
-              )}
             </div>
 
             {categories.length > 0 && selected && (
@@ -324,8 +321,59 @@ export default async function HomePage({ searchParams }: Props) {
           </div>
         </section>
 
-        {/* Special offers */}
-        {topOffers.length > 0 && (
+        {/* Bonuses — one heading, then a block per bonus type, like winpalack.
+            Built from the same getBonusArea payload as the chips and the
+            header/footer Bonuses menus, so no block links to a type the menu
+            lacks. A site without the Bonus area keeps the flat grid below. */}
+        {bonusSections.length > 0 ? (
+          <section className="px-5 pt-[72px]" aria-labelledby="bonus-heading">
+            <div className="mx-auto max-w-[1160px]">
+              <div className="mb-6 flex items-end justify-between gap-4">
+                <h2
+                  id="bonus-heading"
+                  className="font-display text-[28px] font-extrabold leading-[1.08] text-ink sm:text-[36px] lg:text-[44px]"
+                >
+                  {COPY.home.bonus}
+                </h2>
+                <Link
+                  href="/special-offers"
+                  className="hidden shrink-0 items-center gap-1.5 whitespace-nowrap py-3 -my-3 text-[15px] font-bold text-brand transition-colors hover:text-brand-dark sm:inline-flex"
+                >
+                  {COPY.home.viewAll} <span aria-hidden>→</span>
+                </Link>
+              </div>
+              <div className="space-y-12">
+                {bonusSections.map((section) => (
+                  /* id: /#bonus-<slug> anchors, as on winpalack; scroll-mt clears the sticky header. */
+                  <div key={section.id} id={`bonus-${section.slug}`} className="scroll-mt-24">
+                    <div className="mb-5">
+                      <h3 className="font-display text-xl font-bold text-ink sm:text-2xl">
+                        <Link href={`/bonuses/${section.slug}`} className="transition-colors hover:text-brand-dark">
+                          {section.name}
+                        </Link>
+                      </h3>
+                      {section.description && <p className="mt-1 text-ink-soft">{section.description}</p>}
+                    </div>
+                    <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+                      {section.offers.map((offer) => <SpecialOfferCard key={offer.id} offer={offer} />)}
+                    </div>
+                    <div className="mt-5">
+                      <Link href={`/bonuses/${section.slug}`} aria-label={`${COPY.home.seeMore} — ${section.name}`} className="inline-flex min-h-[46px] items-center rounded-full border border-line bg-paper px-7 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink">
+                        {COPY.home.seeMore} →
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-9 text-center">
+                <Link href="/special-offers" aria-label={COPY.home.seeAllBonuses} className="inline-flex min-h-[46px] items-center rounded-full border border-line bg-paper px-7 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink">
+                  {COPY.home.seeAllBonuses} →
+                </Link>
+              </div>
+            </div>
+          </section>
+        ) : topOffers.length > 0 && (
           <section className="px-5 pt-[72px]" aria-labelledby="offers-heading">
             <div className="mx-auto max-w-[1160px]">
               <div className="mb-6 flex items-end justify-between gap-4">

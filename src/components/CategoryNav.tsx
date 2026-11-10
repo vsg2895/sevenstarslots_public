@@ -4,6 +4,14 @@ import { COPY } from '@/constants/copy'
 import MobileCollapse from '@/components/MobileCollapse'
 import type { Category } from '@shared/types/category'
 
+/*
+ * The most chips one row holds — see `oneRow` in the component. Seven chips at
+ * the widest labels measured today need ~1130px in the compact one-row size,
+ * which the narrowest home container (1152px) still holds; past that the grid
+ * keeps wrapping.
+ */
+const MAX_ONE_ROW = 7
+
 /**
  * BetPulseHQ category selector — the mockup's filter tabs: a pill per
  * category, inverted to the ink ground when it is the one being shown.
@@ -17,6 +25,15 @@ export default function CategoryNav({
   categories: Category[]
   selected: string
 }) {
+  /*
+   * ONE ROW from 1280px, like winpalack: with at most MAX_ONE_ROW categories
+   * the grid becomes a single flex line whose chips share the width equally
+   * (`flex-1 basis-0`), with slightly tighter padding so seven fit this site's
+   * container. `flex-wrap` is only a safety net: a chip never shrinks below
+   * its label, so a longer label wraps the row instead of overflowing it.
+   */
+  const oneRow = categories.length <= MAX_ONE_ROW
+
   return (
     /*
      * ONE FULL-WIDTH COLUMN ON A PHONE; from 640px up, a grid of EQUAL chips,
@@ -51,7 +68,7 @@ export default function CategoryNav({
         countClassName="text-[12.5px] font-bold text-muted"
         actionClassName="text-brand font-semibold"
       >
-      <nav aria-label="Casino categories" className="grid grid-cols-1 gap-2 sm:w-max sm:grid-cols-[repeat(2,1fr)] md:grid-cols-[repeat(3,1fr)] lg:grid-cols-[repeat(4,1fr)] xl:grid-cols-[repeat(5,1fr)] sm:gap-2.5">
+      <nav aria-label="Casino categories" className={`grid grid-cols-1 gap-2 sm:w-max sm:grid-cols-[repeat(2,1fr)] md:grid-cols-[repeat(3,1fr)] lg:grid-cols-[repeat(4,1fr)] xl:grid-cols-[repeat(5,1fr)] sm:gap-2.5 ${oneRow ? 'xl:flex xl:w-auto xl:flex-wrap xl:gap-2' : ''}`}>
       {categories.map((c) => {
         const active = c.slug === selected
         return (
@@ -81,7 +98,7 @@ export default function CategoryNav({
             // it 2px shorter than its neighbours — invisible while the tabs
             // share a row and are stretched to match, obvious the moment they
             // wrap to one per row.
-            className={`flex w-full justify-center whitespace-nowrap min-h-[46px] items-center gap-2 rounded-full border px-[18px] text-[15px] font-semibold transition-colors ${
+            className={`${oneRow ? 'xl:flex-1 xl:basis-0 xl:px-2.5 xl:text-sm' : ''} flex w-full justify-center whitespace-nowrap min-h-[46px] items-center gap-2 rounded-full border px-[18px] text-[15px] font-semibold transition-colors ${
               active
                 ? 'border-accent bg-accent text-accent-ink'
                 : 'border-line bg-paper text-ink hover:border-ink'
