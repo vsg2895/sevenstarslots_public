@@ -31,7 +31,7 @@ function Stars({ rating }: { rating: number }) {
 /**
  * BetPulseHQ — the ranked row.
  *
- * Four columns on desktop: the rank numeral, the operator's logo at a size you
+ * Three columns on desktop: the operator's logo at a size you
  * can actually recognise, the reading itself (name · rating · bonus · regions),
  * and the two actions. Taken from `.ccard` in sites/betpulsehq.html.
  *
@@ -54,7 +54,6 @@ function Stars({ rating }: { rating: number }) {
  */
 export default function CasinoCard({
   casino,
-  rank,
 }: {
   casino: CasinoWithAttachment
   rank?: number
@@ -73,19 +72,11 @@ export default function CasinoCard({
         grid items-center gap-x-5 gap-y-4 rounded-[14px] border border-line bg-paper p-[18px]
         transition-[box-shadow,border-color] duration-200
         hover:border-brand/50 hover:shadow-[0_18px_36px_-22px_rgba(0,0,0,0.6)]
-        [grid-template-areas:'rank_logo''info_info''act_act'] [grid-template-columns:36px_1fr]
-        md:gap-x-6 md:p-[22px] md:[grid-template-areas:'rank_logo_info''act_act_act'] md:[grid-template-columns:44px_140px_1fr]
-        lg:[grid-template-areas:'rank_logo_info_act'] lg:[grid-template-columns:56px_180px_1fr_auto] lg:p-6
+        [grid-template-areas:'logo''info''act'] [grid-template-columns:1fr]
+        md:gap-x-6 md:p-[22px] md:[grid-template-areas:'logo_info''act_act'] md:[grid-template-columns:140px_1fr]
+        lg:[grid-template-areas:'logo_info_act'] lg:[grid-template-columns:180px_1fr_auto] lg:p-6
       "
     >
-      {rank != null && (
-        <span
-          className="font-display self-center text-center text-[30px] font-extrabold leading-none tabular-nums text-brand [grid-area:rank] lg:text-[40px]"
-          aria-label={`Rank ${rank}`}
-        >
-          {rank}
-        </span>
-      )}
 
       {/* The logo plate. Fixed height, contained artwork, so a tall logo and a
           wide one occupy the same box and the rows stay aligned.
