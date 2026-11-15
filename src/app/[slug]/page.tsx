@@ -111,13 +111,13 @@ export default async function LegalPage({ params }: Props) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(graph) }} />
 
-      <main className="px-5 pb-16 pt-10">
+      <main className="px-4 pb-16 pt-10">
         <div className="mx-auto max-w-[780px]">
-          <nav className="mb-6 text-sm text-faint">
+          <nav className="mb-6 text-[13px] text-muted">
             <Link href="/" className="inline-block -mx-1 px-1 py-3 -my-3 hover:text-brand">Home</Link> / <span className="text-ink-soft">{page.title}</span>
           </nav>
 
-          <h1 className="font-display text-[34px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{page.title}</h1>
+          <h1 className="font-display text-[clamp(26px,8.5vw,32px)] font-extrabold leading-none text-ink [overflow-wrap:break-word] sm:text-[clamp(32px,4.6vw,56px)]">{page.title}</h1>
           {/* The date a policy last changed is part of the policy: "review it
               periodically" means nothing without one. The same value is the
               WebPage's dateModified above, so the page and its markup agree. */}

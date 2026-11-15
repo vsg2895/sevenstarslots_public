@@ -1,20 +1,25 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { resolveImageUrl } from '@/lib/images'
-import OfferBanner from '@/components/OfferBanner'
 import { COPY } from '@/constants/copy'
 import type { SpecialOffer } from '@shared/types/specialOffer'
 
 const PER_PAGE = 4
 
 /**
- * A casino's attached special offers, shown 4 at a time with the total count.
- * When there are more than 4, client-side pagination pages through them (the
- * offers already arrive with the casino, so no extra fetch is needed).
+ * A casino's attached special offers, shown 4 at a time with the total count —
+ * the mockup's "Bonuses At This Casino": offer tiles (`.ofr`) with the
+ * casino's logo, the bonus type, the offer and its amount. When there are more
+ * than 4, client-side pagination pages through them (the offers already arrive
+ * with the casino, so no extra fetch is needed).
+ *
+ * `logo` is the casino's own: the offers listed here arrive without their
+ * casino attached, and every one of them is this casino's.
  */
-export default function CasinoSpecialOffers({ offers }: { offers: SpecialOffer[] }) {
+export default function CasinoSpecialOffers({ offers, logo }: { offers: SpecialOffer[]; logo?: string | null }) {
   const [page, setPage] = useState(0)
 
   // The API may serialize an empty relation as {} rather than []; guard for it
@@ -28,9 +33,9 @@ export default function CasinoSpecialOffers({ offers }: { offers: SpecialOffer[]
   const visible = list.slice(start, start + PER_PAGE)
 
   return (
-    <section className="mt-10">
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <h2 className="min-w-0 font-display text-2xl font-semibold text-ink">
+    <section className="mt-11">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+        <h2 className="min-w-0 font-display text-[26px] font-extrabold leading-tight text-ink sm:text-[clamp(26px,3vw,36px)]">
           {COPY.casinos.offersHeading} <span className="font-sans text-lg font-semibold text-faint">({total})</span>
         </h2>
         {pageCount > 1 && (
@@ -40,7 +45,7 @@ export default function CasinoSpecialOffers({ offers }: { offers: SpecialOffer[]
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
               aria-label="Previous offers"
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line-soft text-muted transition-colors hover:border-brand hover:text-brand disabled:opacity-40 disabled:hover:border-line-soft disabled:hover:text-muted"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border-[1.5px] border-line-soft text-ink transition-colors hover:border-brand hover:text-brand disabled:opacity-40 disabled:hover:border-line-soft disabled:hover:text-ink"
             >
               ←
             </button>
@@ -55,7 +60,7 @@ export default function CasinoSpecialOffers({ offers }: { offers: SpecialOffer[]
               onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
               disabled={page === pageCount - 1}
               aria-label="More offers"
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line-soft text-muted transition-colors hover:border-brand hover:text-brand disabled:opacity-40 disabled:hover:border-line-soft disabled:hover:text-muted"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border-[1.5px] border-line-soft text-ink transition-colors hover:border-brand hover:text-brand disabled:opacity-40 disabled:hover:border-line-soft disabled:hover:text-ink"
             >
               →
             </button>
@@ -63,38 +68,29 @@ export default function CasinoSpecialOffers({ offers }: { offers: SpecialOffer[]
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-3">
         {visible.map((offer) => {
-          const thumb = resolveImageUrl(offer.image_path ?? offer.banner_image)
+          const thumb = logo ?? resolveImageUrl(offer.image_path ?? offer.banner_image)
           return (
             <Link
               key={offer.id}
               href={`/special-offers/${offer.slug}`}
-              className="group flex gap-4 rounded-xl border border-line bg-paper p-4 transition-colors hover:border-brand hover:bg-brand/5"
+              className="ofr flex flex-col gap-1.5 rounded-2xl border border-line bg-surface p-4 text-ink"
             >
-              {/* The same frame the bonus cards use — see OfferBanner. Rendered
-                  unconditionally: the backdrop IS the frame, so an offer still waiting
-                  for its artwork keeps its place in the row. */}
-              <span className="relative block h-16 w-28 shrink-0 overflow-hidden rounded-lg">
-                <OfferBanner src={thumb} alt={offer.title} sizes="112px" />
+              <span className="flex items-center gap-2.5">
+                <span aria-hidden className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-[14px] bg-white p-1.5">
+                  {thumb && <Image src={thumb} alt="" width={112} height={112} sizes="56px" className="h-full w-full object-contain" />}
+                </span>
+                <span className="min-w-0">
+                  {/* The bonus TYPE, as the editor named it. Only when filed under one. */}
+                  {offer.bonus_category_name && (
+                    <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-muted">{offer.bonus_category_name}</span>
+                  )}
+                  <span className="block text-base font-bold leading-[1.25] [overflow-wrap:anywhere]">{offer.title}</span>
+                </span>
               </span>
-              <span className="min-w-0">
-                {/* The bonus TYPE, as the editor named it.
-                    An eyebrow rather than a line under the title: the title is
-                    truncated to one line and the description clamped to two, so
-                    anything added below them competes for space that is already
-                    spoken for. Rendered only when the offer is filed under a
-                    type — an unfiled one shows nothing rather than an empty
-                    chip. */}
-                {offer.bonus_category_name && (
-                  <span className="mb-1 inline-block rounded-full border border-line text-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
-                    {offer.bonus_category_name}
-                  </span>
-                )}
-                <span className="block truncate font-semibold text-ink group-hover:text-brand">{offer.title}</span>
-                {offer.bonuses && <span className="mt-1 block line-clamp-2 text-sm text-muted">{offer.bonuses}</span>}
-                <span className="mt-2 inline-block text-xs font-bold text-brand">View offer →</span>
-              </span>
+              {offer.bonuses && <span className="mt-1 block text-[15px] font-bold leading-[1.3] text-brand-dark">{offer.bonuses}</span>}
+              <span className="mt-auto pt-2 text-sm font-bold text-brand">View offer →</span>
             </Link>
           )
         })}

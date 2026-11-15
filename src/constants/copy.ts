@@ -98,26 +98,63 @@ export const COPY = {
     // numbering this one is information.
     methodTitle: 'How a casino earns its place',
     methodSubtitle: 'The seven checks, grouped into the three stages they happen in.',
+    // The stage colours are the mockup's three stars: gold, cream, teal.
     methodSteps: [
       {
-        kicker: '01 — Checks 1–2',
+        no: '01',
+        checks: 'Checks 1–2',
         title: 'Licence & deposit',
         body:
           'Who holds the licence and where, then what the welcome offer actually asks of a new player: minimum deposit, wagering multiplier and what it applies to.',
       },
       {
-        kicker: '02 — Checks 3–5',
+        no: '02',
+        checks: 'Checks 3–5',
         title: 'Slots, RTP & mobile',
         body:
           'The slot library and who supplies it, the RTPs the operator publishes, and whether the same games and the same terms survive on a phone.',
       },
       {
-        kicker: '03 — Checks 6–7',
+        no: '03',
+        checks: 'Checks 6–7',
         title: 'Support & payout',
         body:
           'Whether live support answers at peak hours, and what the withdrawal conditions are — caps, verification and the methods actually offered.',
       },
     ],
+    // ── The hero card: the seven checks, one line each, in their stages ───
+    // The same seven the method band and the FAQ name — never a star count.
+    checksTitle: 'What every casino goes through',
+    checksNote: 'Same seven · same order',
+    checkStages: [
+      {
+        label: 'Stage 01 · Licence & deposit',
+        checks: [
+          { name: 'Licence', line: 'Who holds it, and where.' },
+          { name: 'Deposit', line: 'Minimum deposit and the wagering on the welcome offer.' },
+        ],
+      },
+      {
+        label: 'Stage 02 · Slots, RTP & mobile',
+        checks: [
+          { name: 'Slot library', line: 'The games and who supplies them.' },
+          { name: 'Published RTP', line: 'Which return-to-player settings the operator runs.' },
+          { name: 'Mobile', line: 'The same games and terms on a phone.' },
+        ],
+      },
+      {
+        label: 'Stage 03 · Support & payout',
+        checks: [
+          { name: 'Live support', line: 'Whether it answers at peak hours.' },
+          { name: 'Payout', line: 'Caps, verification and the methods offered.' },
+        ],
+      },
+    ],
+    verdictChecks: { label: 'The checks decide', text: 'Whether a casino is on the list at all' },
+    verdictStars: { label: 'The stars show', text: 'Our editorial score out of five' },
+    rankingLabel: 'The ranking',
+    methodLabel: 'Method',
+    faqLabel: 'FAQ',
   },
   casinos: {
     pageTitle: 'Every Slot Casino On The List',

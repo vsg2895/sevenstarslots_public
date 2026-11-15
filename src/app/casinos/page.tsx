@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { getCategories, getCategory } from '@/lib/api'
 import { buildItemListSchema, buildWebPageSchema, jsonLdScript, SHARE_IMAGES } from '@/lib/seo'
 import { COPY } from '@/constants/copy'
-import CasinoCard from '@/components/CasinoCard'
+import CasinoCard, { CASINO_GRID } from '@/components/CasinoCard'
 import CategoryNav from '@/components/CategoryNav'
 import Pagination from '@/components/Pagination'
 import type { Category } from '@shared/types/category'
@@ -75,9 +75,9 @@ export default async function CasinosPage({ searchParams }: Props) {
 
   if (!selected) {
     return (
-      <main className="px-5 pb-12 pt-6 sm:pb-16 sm:pt-10">
-        <div className="mx-auto max-w-[1160px]">
-          <h1 className="font-display text-[26px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.casinos.pageTitle}</h1>
+      <main className="pb-12 pt-6 sm:pb-16 sm:pt-10">
+        <div className="mx-auto max-w-[1200px] px-4">
+          <h1 className="font-display text-[clamp(26px,8.5vw,32px)] font-extrabold leading-none text-ink [overflow-wrap:break-word] sm:text-[clamp(32px,4.6vw,56px)]">{COPY.casinos.pageTitle}</h1>
           <p className="mt-2 max-w-[680px] text-[17px] text-ink-soft">{COPY.casinos.noResults}</p>
         </div>
       </main>
@@ -123,10 +123,10 @@ export default async function CasinosPage({ searchParams }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(graph) }} />
-      <main className="px-5 pb-12 pt-6 sm:pb-16 sm:pt-10">
-        <div className="mx-auto max-w-[1160px]">
+      <main className="pb-12 pt-6 sm:pb-16 sm:pt-10">
+        <div className="mx-auto max-w-[1200px] px-4">
           <header className="mb-4 sm:mb-8">
-            <h1 className="font-display text-[26px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{COPY.casinos.pageTitle}</h1>
+            <h1 className="font-display text-[clamp(26px,8.5vw,32px)] font-extrabold leading-none text-ink [overflow-wrap:break-word] sm:text-[clamp(32px,4.6vw,56px)]">{COPY.casinos.pageTitle}</h1>
             <p className="mt-1 max-w-[680px] text-[15px] text-ink-soft sm:mt-2 sm:text-[17px]">{COPY.casinos.pageDescription}</p>
           </header>
 
@@ -141,7 +141,7 @@ export default async function CasinosPage({ searchParams }: Props) {
           {casinos.length === 0 ? (
             <p className="rounded-[14px] border border-dashed border-line bg-paper p-10 text-center text-muted">{COPY.casinos.noResults}</p>
           ) : (
-            <ol className="flex flex-col gap-3.5">
+            <ol className={CASINO_GRID}>
               {casinos.map((casino, i) => (
                 <CasinoCard key={casino.id} casino={casino} rank={(meta.current_page - 1) * meta.per_page + i + 1} />
               ))}

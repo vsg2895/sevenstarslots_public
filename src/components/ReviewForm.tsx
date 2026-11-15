@@ -96,7 +96,7 @@ export default function ReviewForm({ casinoSlug }: { casinoSlug: string }) {
 
   return (
     <form onSubmit={onSubmit} className="rounded-2xl border border-line bg-paper p-6">
-      <h3 className="font-display text-lg font-semibold text-ink">{COPY.reviews.formTitle}</h3>
+      <h3 className="font-display text-xl font-extrabold text-ink">{COPY.reviews.formTitle}</h3>
       <p className="mt-1 text-sm text-muted">{COPY.reviews.formIntro}</p>
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2">

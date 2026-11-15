@@ -33,8 +33,7 @@ export default function Logo({
   return (
     <Link
       href="/"
-      aria-label="SevenStarSlots home"
-      className={`inline-flex min-h-11 shrink-0 items-center gap-3 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 ${
+      className={`inline-flex min-h-11 shrink-0 items-center gap-2.5 rounded-lg min-[22.5rem]:gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 ${
         onDark ? 'focus-visible:ring-offset-[#0a1f1c]' : 'focus-visible:ring-offset-cream'
       } ${className}`.trim()}
     >
@@ -77,16 +76,19 @@ export default function Logo({
       </svg>
 
       <span className="flex flex-col leading-none">
-        <span className="font-display text-[18px] font-bold tracking-[-0.02em] text-ink sm:text-[20px]">
+        <span className="font-display text-[15px] font-extrabold tracking-[-0.01em] text-ink min-[22.5rem]:text-[18px] sm:text-[20px]">
           SevenStar<span className="text-brand">Slots</span>
         </span>
         <span
-          className={`mt-[5px] text-[9px] font-semibold uppercase tracking-[0.2em] ${
+          className={`mt-[5px] text-[11px] font-bold uppercase tracking-[0.04em] min-[22.5rem]:tracking-[0.12em] ${
             onDark ? 'text-night-muted' : 'text-muted'
           }`}
         >
           Seven-point slot ratings
         </span>
+        {/* The link's name is its visible text plus this — no aria-label that
+            could disagree with what is on screen. */}
+        <span className="sr-only"> home</span>
       </span>
     </Link>
   )

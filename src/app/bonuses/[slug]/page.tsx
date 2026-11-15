@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getBonusCategory } from '@/lib/api'
 import { buildBreadcrumbSchema, buildItemListSchema, buildWebPageSchema, breadcrumbIdFor, jsonLdScript, SHARE_IMAGES } from '@/lib/seo'
 import { COPY } from '@/constants/copy'
-import SpecialOfferCard from '@/components/SpecialOfferCard'
+import SpecialOfferCard, { OFFER_GRID } from '@/components/SpecialOfferCard'
 import Pagination from '@/components/Pagination'
 import { SITE_URL } from '@/lib/config'
 import { canonicalPath } from '@/lib/seo/canonical'
@@ -148,9 +148,9 @@ export default async function BonusCategoryPage({ params, searchParams }: Props)
 
       {/* The same measure, grid and card as /special-offers, so arriving here
           from a chip is that listing narrowed rather than a different page. */}
-      <main className="px-5 pb-12 pt-6 sm:pb-16 sm:pt-10">
-        <div className="mx-auto max-w-[1160px]">
-          <nav className="mb-3 text-sm sm:mb-6 text-faint">
+      <main className="pb-12 pt-6 sm:pb-16 sm:pt-10">
+        <div className="mx-auto max-w-[1200px] px-4">
+          <nav className="mb-4 text-[13px] text-muted sm:mb-6">
             <Link href="/" className="inline-block -mx-1 px-1 py-3 -my-3 hover:text-brand">Home</Link>
             {' / '}
             <Link href="/special-offers" className="inline-block -mx-1 px-1 py-3 -my-3 hover:text-brand">{COPY.nav.specialOffers}</Link>
@@ -159,7 +159,7 @@ export default async function BonusCategoryPage({ params, searchParams }: Props)
           </nav>
 
           <header className="mb-4 sm:mb-8">
-            <h1 className="font-display text-[26px] font-extrabold leading-[1.08] text-ink sm:text-[46px]">{category.name}</h1>
+            <h1 className="font-display text-[clamp(26px,8.5vw,32px)] font-extrabold leading-none text-ink [overflow-wrap:break-word] sm:text-[clamp(32px,4.6vw,56px)]">{category.name}</h1>
             {category.description && <p className="mt-1 max-w-[680px] text-[15px] text-ink-soft sm:mt-2 sm:text-[17px]">{category.description}</p>}
             {/* The count is what lets a reader trust the paginator: it says how
                 much is behind these cards. */}
@@ -173,7 +173,7 @@ export default async function BonusCategoryPage({ params, searchParams }: Props)
           {offers.length === 0 ? (
             <p className="rounded-[14px] border border-dashed border-line bg-paper p-10 text-center text-muted">{COPY.specialOffers.noResults}</p>
           ) : (
-            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className={OFFER_GRID}>
               {offers.map((offer) => <SpecialOfferCard key={offer.id} offer={offer} />)}
             </div>
           )}

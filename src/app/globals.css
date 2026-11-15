@@ -1,20 +1,18 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* SevenStarSlots — deep teal ground, warm cream type, gold primary.
-   Palette and type lifted from sites/sevenstarslots.html.
-   Fonts: Manrope (body) + Unbounded (display).
+/* SevenStarSlots — "constellation", from sites/sevenstarslots-redesign.html:
+   a deep green night sky, gold starlight, framed playing-card casino tiles,
+   medallions, accordion offers and a FAQ carousel.
+   Fonts: Manrope (body) + Syne (display).
 
    TOKEN NAMES are identical to the sibling sites (cream/paper/ink/brand/…) so
-   every shared component works here unchanged — only the values differ. That is
-   what makes a site a re-theme rather than a rewrite: nothing in the component
-   tree asks which domain it is rendering for.
+   every shared component works here unchanged — only the values differ.
 
-   THIS SITE IS DARK, and it was cloned from betpulsehq, which is LIGHT. Every
-   value below is therefore inverted relative to the file it came from, and the
-   inversion has to be total — a single token left at a light value lands pale
-   text on a pale panel. The three places that bit during the port are called
-   out where they are defined. */
+   THIS SITE IS DARK. `cream` is the page ground (the darkest value), and the
+   ladder `paper` → `surface` → `raise` runs LIGHTER as it rises, which on a
+   dark ground is what separates a card from what is behind it. `ink` is the
+   LIGHT text colour. */
 :root {
   --background: #0f2a27;
   --foreground: #f3eedf;
@@ -24,80 +22,56 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* `cream` is the BASE page surface, `paper` the raised panel above it, and
-     `surface` a third step for tiles inside a panel. The ladder runs LIGHTER as
-     it rises, which on a dark ground is what separates a card from what is
-     behind it. `cream` is a misnomer inherited from the network's shared token
-     names — it is the darkest value here, and renaming it would break every
-     component the sites have in common. */
+  /* The mockup's --bg / --bg2 / --panel / --panel2. */
   --color-cream: #0f2a27;
-  --color-paper: #153632;
-  --color-surface: #1b423d;
+  --color-paper: #123330;
+  --color-surface: #163b37;
+  --color-raise: #1c4842;
 
-  /* Warm cream, not white. The ground is a cold teal and a pure white on it
-     reads as glare; this is the mockup's own `--ink`, pulled slightly warm so
-     long reads stay comfortable. */
+  /* Warm cream text, not white: on the cold green a pure white reads as glare. */
   --color-ink: #f3eedf;
-  --color-ink-soft: #c2cfc8;
-  --color-muted: #93aaa3;
+  --color-ink-soft: #b9c9c2;
+  --color-muted: #8fa69e;
   --color-faint: #7a918b;
 
-  /* Gold primary. `brand-ink` is the text colour that goes ON it — and it is
-     DARK here, not white: #10241f on #e9b649 clears 4.5:1, white would not.
-     Cloning from a site whose `brand-ink` was white is exactly how a gold
-     button ends up with invisible text. */
-  --color-brand: #e9b649;
-  /* LIGHTER than `brand`, deliberately. Every sibling treats `brand-dark` as a
-     hover that deepens the colour; on a dark ground that makes the button
-     recede when it should respond, so here the hover BRIGHTENS. The token name
-     is the network's, the direction is this design's. */
-  --color-brand-dark: #f4cb6e;
-  --color-brand-soft: #d9a43a;
-  /* The pale wash: the h1 highlight underline and the bonus bar. Background
-     only — it has no contrast as a text colour and is not meant to. */
-  --color-brand-tint: rgba(233, 182, 73, 0.22);
-  --color-brand-ink: #10241f;
+  /* Gold primary. `brand-ink` is the text ON it — DARK, because white on this
+     gold is under 2:1. `brand-dark` is the hover and it BRIGHTENS: on a dark
+     ground a deepening hover makes the button recede when it should respond. */
+  --color-brand: #e8b94a;
+  --color-brand-dark: #f5d27e;
+  --color-brand-soft: #f5d27e;
+  /* The pale wash behind a selected chip and the step numbers. Background only. */
+  --color-brand-tint: rgba(232, 185, 74, 0.14);
+  --color-brand-ink: #1b1606;
 
-  /* Coral, the one colour that is neither teal nor gold: the 18+ mark. It has
-     to read as a warning rather than as more brand, which is why it is not the
-     gold, and it is the only place this hue appears. It doubles as the focus
-     ring, where it stands out against both the ground and the gold. */
-  --color-accent: #e07a5f;
-  --color-accent-dark: #c9654b;
-  --color-accent-ink: #1a0f0b;
+  /* Teal, the mockup's second star colour: the focus ring and the third
+     method stage. */
+  --color-accent: #6fd6c3;
+  --color-accent-dark: #58c2af;
+  --color-accent-ink: #0f2a27;
 
-  --color-line: #27524c;
-  --color-line-soft: #3a6b64;
+  --color-line: #26514b;
+  --color-line-soft: #336760;
 
-  /* ── The footer sub-palette ───────────────────────────────────────────────
-     The footer sits on its own darker ground (#0a1f1c) beneath the page, so it
-     needs a ramp of its own — `muted` is tuned against `cream` and loses
-     contrast down there.
-
-     On the light sibling these tokens inverted a dark footer out of a light
-     page. Here the footer is simply deeper than the page, so the values are
-     close to the main ramp rather than opposed to it. The NAMES are kept so a
-     component shared with that site keeps working. */
-  --color-night-ink: #b4c4be;
-  --color-night-muted: #93aaa3;
-  --color-night-faint: #7a918b;
+  /* The footer sub-palette — the footer sits on its own deeper ground. */
+  --color-night: #0b211f;
+  --color-night-ink: #b9c9c2;
+  --color-night-muted: #8fa69e;
+  --color-night-faint: #8fa69e;
   --color-night-line: #1e3f3a;
-  --color-night-accent: #e9b649;
+  --color-night-accent: #e8b94a;
 
   /* Stars take the brand gold — on this site the rating IS the brand. */
-  --color-gold: #e9b649;
-  /* Mint, for the factual chips (accepted regions, bonus terms). A genuinely
-     separate signal from `brand`: gold is "this is the offer", mint is "this is
-     verified fact". */
-  --color-win: #9fd8c4;
-  --color-win-bg: rgba(127, 209, 185, 0.14);
+  --color-gold: #e8b94a;
+  /* Teal for the factual chips (accepted regions): gold is "this is the
+     offer", teal is "this is a fact about the operator". */
+  --color-win: #6fd6c3;
+  --color-win-bg: rgba(111, 214, 195, 0.14);
 
   --font-sans: var(--font-manrope);
-  --font-display: var(--font-unbounded);
+  --font-display: var(--font-syne);
   --font-mono: var(--font-geist-mono);
 
-  /* 14px panels, 10px controls — tighter than the sibling's 18/12, which is
-     most of why this design reads as harder-edged. Pills stay fully round. */
   --radius-ss: 14px;
 }
 
@@ -109,52 +83,169 @@ body {
 }
 
 .font-display {
-  font-family: var(--font-unbounded), system-ui, sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-syne), system-ui, sans-serif;
+  letter-spacing: -0.01em;
 }
 
-/* ── The star beat ──────────────────────────────────────────────────────────
-   The eyebrow's pulsing dot — the one piece of motion on the site. An
-   expanding ring rather than a blinking opacity, so it reads as something
-   being counted rather than as a fault.
+:focus-visible {
+  outline-color: var(--color-accent);
+}
 
-   `prefers-reduced-motion` stops it dead and leaves the dot in place: the dot
-   is a visual element, the animation is decoration, and only the decoration is
-   negotiable. */
-@keyframes ss-beat {
-  0% {
-    box-shadow: 0 0 0 0 rgba(233, 182, 73, 0.55);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(233, 182, 73, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(233, 182, 73, 0);
+/* ── The night sky ─────────────────────────────────────────────────────────
+   Seven faint stars per tile, repeated: the mockup's `.sky`. Pure CSS
+   gradients, so it costs no request and carries no information. */
+.sky {
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(243, 238, 223, 0.7), transparent),
+    radial-gradient(1px 1px at 34% 62%, rgba(243, 238, 223, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 58% 24%, rgba(243, 238, 223, 0.7), transparent),
+    radial-gradient(1px 1px at 76% 70%, rgba(243, 238, 223, 0.5), transparent),
+    radial-gradient(1px 1px at 90% 30%, rgba(243, 238, 223, 0.6), transparent),
+    radial-gradient(1px 1px at 46% 88%, rgba(243, 238, 223, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 6% 78%, rgba(243, 238, 223, 0.5), transparent);
+  background-size: 420px 300px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn-g,
+.btn-o {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  font-weight: 700;
+  text-align: center;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.btn-g {
+  background: var(--color-brand);
+  color: var(--color-brand-ink);
+}
+.btn-g:hover {
+  background: var(--color-brand-dark);
+  color: var(--color-brand-ink);
+}
+.btn-o {
+  border-color: var(--color-line-soft);
+  color: var(--color-ink);
+}
+.btn-o:hover {
+  border-color: var(--color-brand);
+  color: var(--color-ink);
+}
+
+/* ── Casino tiles: a framed playing card ──────────────────────────────────
+   An outer card and an inner frame; on hover or keyboard focus the card lifts
+   and both edges turn gold. */
+.pc {
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.pc-in {
+  transition: border-color 0.25s;
+}
+.pc:hover,
+.pc:focus-within {
+  transform: translateY(-4px);
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 1px var(--color-brand), 0 22px 50px -18px rgba(232, 185, 74, 0.45);
+}
+.pc:hover .pc-in,
+.pc:focus-within .pc-in {
+  border-color: rgba(232, 185, 74, 0.45);
+}
+
+/* ── Bonus-type medallions ─────────────────────────────────────────────────
+   A dashed ring around a filled disc; hover solidifies the ring in gold and
+   turns it a little, like a coin. */
+.md-ring {
+  transition: border-color 0.25s, transform 0.25s;
+}
+.md-ring::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background: var(--color-surface);
+}
+.md:hover .md-ring,
+.md:focus-visible .md-ring {
+  border-color: var(--color-brand);
+  border-style: solid;
+  transform: rotate(12deg);
+}
+
+/* ── The method stages: a dot on the rule above each stage ─────────────── */
+.stg::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -7px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--c);
+}
+@media (min-width: 640px) {
+  .stg + .stg::before {
+    left: 26px;
   }
 }
-.pulse-dot {
-  animation: ss-beat 1.6s infinite;
+
+/* ── Bonus accordion ───────────────────────────────────────────────────── */
+.acc summary {
+  list-style: none;
 }
+.acc summary::-webkit-details-marker {
+  display: none;
+}
+.acc summary::after {
+  content: '';
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--color-brand);
+  border-bottom: 2px solid var(--color-brand);
+  transform: rotate(45deg) translateY(-3px);
+  transition: transform 0.2s;
+}
+.acc details[open] > summary::after {
+  transform: rotate(225deg) translateY(-3px);
+}
+
+/* ── Offer tiles: the whole tile responds ──────────────────────────────── */
+.ofr {
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.ofr:hover,
+.ofr:focus-within {
+  border-color: var(--color-brand);
+  background-color: var(--color-raise);
+}
+
+/* ── Category filters: ☆ idle, ★ selected ──────────────────────────────── */
+.fb::before {
+  content: '☆';
+  color: var(--color-muted);
+}
+.fb[aria-current='page']::before {
+  content: '★';
+  color: var(--color-brand);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .pulse-dot {
-    animation: none;
+  .pc,
+  .pc-in,
+  .md-ring,
+  .ofr,
+  .acc summary::after {
+    transition: none;
   }
-}
-
-/* The hero ground: a single gold ellipse bleeding down from the top edge, at
-   the mockup's own opacity. One gradient, not three — this design earns its
-   depth from the panel ladder, and a busier wash would fight the headline. */
-.hero-wash {
-  background: radial-gradient(ellipse 60% 70% at 50% 0%, rgba(233, 182, 73, 0.12), transparent 70%),
-    var(--color-cream);
-}
-
-/* The dark banner behind a casino or offer headline — the mockup's `.banner`:
-   a diagonal from the footer's near-black to the raised tile colour. Used by
-   the detail pages and by the offer cards, so a bonus's artwork sits on the
-   same ground in the grid it is listed in and on the page it opens. */
-.banner-wash {
-  background: linear-gradient(120deg, #0a1f1c, #1b423d);
+  .pc:hover,
+  .pc:focus-within {
+    transform: none;
+  }
 }
 
 /* ── Responsive safety net (all phones / tablets / laptops / large screens) ── */
@@ -239,7 +330,7 @@ body {
 }
 .prose :where(h1, h2, h3, h4, h5, h6) {
   color: var(--color-ink);
-  font-family: var(--font-unbounded), system-ui, sans-serif;
+  font-family: var(--font-syne), system-ui, sans-serif;
   letter-spacing: -0.02em;
 }
 .prose :where(strong, b, th, dt) {

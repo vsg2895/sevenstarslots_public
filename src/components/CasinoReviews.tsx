@@ -32,9 +32,9 @@ export default async function CasinoReviews({
   const { reviews, summary } = res.data
 
   return (
-    <section className="mt-10" aria-labelledby="player-reviews">
+    <section className="mt-11" aria-labelledby="player-reviews">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="player-reviews" className="font-display text-2xl font-bold text-ink">
+        <h2 id="player-reviews" className="font-display text-[26px] font-extrabold leading-tight text-ink sm:text-[clamp(26px,3vw,36px)]">
           {COPY.reviews.heading}
         </h2>
 
