@@ -203,7 +203,7 @@ export const COPY = {
   newsletter: {
     title: 'New star ratings, every Friday.',
     subtitle: 'Fresh slot casinos, free-spin drops, and who gained or lost ground this week.',
-    placeholder: 'Email address',
+    placeholder: 'Email for new slot reviews',
     button: 'Subscribe',
     checking: 'Checking…',
     // The spam line is NOT optional wording. This is a double opt-in list: an
@@ -245,6 +245,9 @@ export const COPY = {
     ratingLabel: 'Rating',
     titleLabel: 'Headline (optional)',
     bodyLabel: 'Your verdict',
+    namePlaceholder: 'First name or nickname',
+    emailPlaceholder: 'you@example.com',
+    titlePlaceholder: 'One line on how the slots played',
     bodyPlaceholder: 'How did it actually go — spins, wagering, withdrawal, support?',
     submit: 'Post Verdict',
     success: 'Thanks — your verdict is now live. Scroll up to see it.',

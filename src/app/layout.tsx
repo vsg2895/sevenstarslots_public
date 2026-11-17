@@ -141,7 +141,7 @@ const NAV_LINKS = [
 /** A header link — the mockup's `nav.main a`: a soft panel on hover. */
 const NAV_LINK = 'flex min-h-11 items-center whitespace-nowrap rounded-[10px] px-3.5 py-2 text-[15px] font-semibold text-ink transition-colors hover:bg-surface'
 
-const FOOTER_LINK = 'inline-block -mx-1 px-1 py-1.5 -my-1.5 text-sm text-night-ink transition-colors hover:text-ink'
+const FOOTER_LINK = 'inline-flex min-h-11 min-w-11 items-center text-sm text-night-ink transition-colors hover:text-ink'
 
 const FOOTER_HEAD = 'text-[11px] font-bold uppercase tracking-[0.18em] text-brand'
 
@@ -303,7 +303,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <div className="grid flex-[2_1_480px] grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
                 <div>
                   <p className={FOOTER_HEAD}>Explore</p>
-                  <ul className="mt-2.5 flex flex-col gap-2.5">
+                  <ul className="mt-2.5 flex flex-col">
                     {navLinks.map(({ href, label }) =>
                       href === '/casinos' && categoryMenuItems.length > 0 ? (
                         <FooterNavGroup key={href} label={label} href={href} allLabel={COPY.nav.allCasinos} itemBasePath="/categories" items={categoryMenuItems} linkClassName={FOOTER_LINK} guideClassName="border-night-line" />
@@ -322,7 +322,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 </div>
                 <nav aria-label="Legal">
                   <p className={FOOTER_HEAD}>Legal</p>
-                  <ul className="mt-2.5 flex flex-col gap-2.5">
+                  <ul className="mt-2.5 flex flex-col">
                     {footerPages(FOOTER_LEGAL).map(({ slug, label }) => (
                       <li key={slug}><Link href={`/${slug}`} className={FOOTER_LINK}>{label}</Link></li>
                     ))}
@@ -333,7 +333,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 </nav>
                 <nav aria-label="Policies">
                   <p className={FOOTER_HEAD}>Policies</p>
-                  <ul className="mt-2.5 flex flex-col gap-2.5">
+                  <ul className="mt-2.5 flex flex-col">
                     {footerPages(FOOTER_POLICIES).map(({ slug, label }) => (
                       <li key={slug}><Link href={`/${slug}`} className={FOOTER_LINK}>{label}</Link></li>
                     ))}
