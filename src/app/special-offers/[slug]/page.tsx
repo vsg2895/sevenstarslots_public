@@ -9,6 +9,7 @@ import { COPY } from '@/constants/copy'
 import { SITE_URL } from '@/lib/config'
 import BonusTerms from '@/components/BonusTerms'
 import SpecialOfferCard, { CLAIMABLE_BONUS_CATEGORY, OFFER_GRID } from '@/components/SpecialOfferCard'
+import OfferVisitTracker from '@/components/OfferVisitTracker'
 
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? ''
 
@@ -200,6 +201,10 @@ export default async function SpecialOfferDetailPage({ params }: Props) {
 
   return (
     <>
+      {/* Records this visit, but only if the visitor accepted in the
+          cookie banner. Renders nothing and never blocks the page. */}
+      <OfferVisitTracker specialOfferId={offer.id} />
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(graph) }} />
 
       <main className="pb-4">
